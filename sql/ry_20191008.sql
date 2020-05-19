@@ -1,4 +1,14 @@
 -- ----------------------------
+-- 0、部门表
+-- ----------------------------
+create sequence seq_sys_resgroup
+ increment by 1
+ start with 200
+ nomaxvalue
+ nominvalue
+ cache 20;
+
+-- ----------------------------
 -- 1、部门表
 -- ----------------------------
 create sequence seq_sys_dept

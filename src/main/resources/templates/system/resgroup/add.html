@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+<th:block th:include="include :: header('新增业务系统')" />
+</head>
+<body class="white-bg">
+	<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+		<form class="form-horizontal m" id="form-resgroup-add">
+			<input name="parentId" type="hidden" id="treeId" />
+			<div class="form-group">
+				<label class="col-sm-3 control-label">业务系统名称：</label>
+				<div class="col-sm-8">
+					<input name="groupName" class="form-control" type="text" required>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-sm-3 control-label">父级业务系统：</label>
+				<div class="col-sm-8">
+					<input name="choseParentId" onclick="selectResGroupTree()"
+						id="treeName" type="text" placeholder="请选择父级业务系统"
+						class="form-control" required>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">负责人：</label>
+				<div class="col-sm-8">
+					<input name="leader" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">是否涉敏：</label>
+				<div class="col-sm-8">
+					<select name="issensitivity" class="form-control">
+						<option value="">所有</option>
+						<option value="0">否</option>
+						<option value="1">是</option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">定级系统名称：</label>
+				<div class="col-sm-8">
+					<input name="rankGroupname" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">定级：</label>
+				<div class="col-sm-8">
+					<select class="form-control" name="rank"
+						th:with="type=${@dict.getType('system_rank')}">
+						<option value="">所有</option>
+						<option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+							th:value="${dict.dictValue}"></option>
+					</select>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-sm-3 control-label">集成厂商：</label>
+				<div class="col-sm-8">
+					<input name="vendor" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">分管部门：</label>
+				<div class="col-sm-8">
+					<input name="management" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">系统分布：</label>
+				<div class="col-sm-8">
+					<input name="distribution" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">主要功能：</label>
+				<div class="col-sm-8">
+					<textarea name="mainfunction" maxlength="500" class="form-control"
+						rows="3"></textarea>
+				</div>
+			</div>
+
+		</form>
+	</div>
+	<th:block th:include="include :: footer" />
+	<script type="text/javascript">
+		var prefix = ctx + "system/resgroup"
+		$("#form-resgroup-add").validate({
+			focusCleanup : true
+		});
+
+		function submitHandler() {
+			if ($.validate.form()) {
+				$.operate.save(prefix + "/add", $('#form-resgroup-add')
+						.serialize(), refreshTree);
+			}
+		}
+
+		/* 添加完数据之后 重新绑定树 */
+		function refreshTree() {
+			window.parent.queryResGroupTree();
+		}
+
+		/*用户管理-新增-选择业务系统树*/
+		function selectResGroupTree() {
+			var treeId = $("#treeId").val();
+			var resGroupId = $.common.isEmpty(treeId) ? "1" : $("#treeId")
+					.val();
+			var url = ctx + "system/resgroup/selectResGroupTree/" + resGroupId;
+			var options = {
+				title : '选择父级业务系统',
+				width : "380",
+				url : url,
+				callBack : doSubmit
+			};
+			$.modal.openOptions(options);
+		}
+
+		function doSubmit(index, layero) {
+			var tree = layero.find("iframe")[0].contentWindow.$._tree;
+			var body = layer.getChildFrame('body', index);
+			$("#treeId").val(body.find('#treeId').val());
+			$("#treeName").val(body.find('#treeName').val());
+			layer.close(index);
+		}
+	</script>
+</body>
+</html>
