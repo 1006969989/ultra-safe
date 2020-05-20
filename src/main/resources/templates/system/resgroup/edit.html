@@ -1,126 +1,104 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:include="include :: header('修改业务系统')" />
+<th:block th:include="include :: header('修改业务系统')" />
 </head>
 <body class="white-bg">
-    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
-        <form class="form-horizontal m" id="form-resgroup-edit" th:object="${resgroup}">
-            <input name="resId" th:field="*{resId}" type="hidden">
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">主键：</label>
-                <div class="col-sm-8">
-                    <input name="resId" th:field="*{resId}" class="form-control" type="text" required>
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">父业务系统id：</label>
-                <div class="col-sm-8">
-                    <input name="parentId" th:field="*{parentId}" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">业务系统名称：</label>
-                <div class="col-sm-8">
-                    <select name="groupName" class="form-control m-b">
-                        <option value="">所有</option>
-                    </select>
-                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">负责人：</label>
-                <div class="col-sm-8">
-                    <input name="leader" th:field="*{leader}" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">联系电话：</label>
-                <div class="col-sm-8">
-                    <input name="phone" th:field="*{phone}" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">邮箱：</label>
-                <div class="col-sm-8">
-                    <input name="email" th:field="*{email}" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">业务系统状态：</label>
-                <div class="col-sm-8">
-                    <div class="radio-box">
-                        <input type="radio" name="status" value="">
-                        <label th:for="status" th:text="未知"></label>
-                    </div>
-                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">定级系统名称：</label>
-                <div class="col-sm-8">
-                    <input name="rankGroupname" th:field="*{rankGroupname}" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">定级：</label>
-                <div class="col-sm-8">
-                    <select name="rank" class="form-control m-b">
-                        <option value="">所有</option>
-                    </select>
-                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">是否涉敏：</label>
-                <div class="col-sm-8">
-                    <input name="issensitivity" th:field="*{issensitivity}" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">集成厂商：</label>
-                <div class="col-sm-8">
-                    <input name="vendor" th:field="*{vendor}" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">分管部门：</label>
-                <div class="col-sm-8">
-                    <input name="management" th:field="*{management}" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">主要功能：</label>
-                <div class="col-sm-8">
-                    <input name="mainfunction" th:field="*{mainfunction}" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">系统分布：</label>
-                <div class="col-sm-8">
-                    <input name="distribution" th:field="*{distribution}" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">业务系统uuid：</label>
-                <div class="col-sm-8">
-                    <input name="resgroupuuid" th:field="*{resgroupuuid}" class="form-control" type="text">
-                </div>
-            </div>
-        </form>
-    </div>
-    <th:block th:include="include :: footer" />
-    <script type="text/javascript">
-        var prefix = ctx + "resgroup/resgroup";
-        $("#form-resgroup-edit").validate({
-            focusCleanup: true
-        });
+	<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+		<form class="form-horizontal m" id="form-resgroup-edit"
+			th:object="${resgroup}">
+			<input name="resId" th:field="*{resId}" type="hidden">
+			<div class="form-group">
+				<label class="col-sm-3 control-label">业务系统名称：</label>
+				<div class="col-sm-8">
+					<input name="groupName" class="form-control"
+						th:field="*{groupName}" type="text" required>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">负责人：</label>
+				<div class="col-sm-8">
+					<input name="leader" th:field="*{leader}" class="form-control"
+						type="text">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">是否涉敏：</label>
+				<div class="col-sm-8">
+					<select name="issensitivity" th:field="*{issensitivity}"
+						class="form-control" required>
+						<option value="">请选择</option>
+						<option value="0">否</option>
+						<option value="1">是</option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">定级：</label>
+				<div class="col-sm-8">
+					<select class="form-control" name="rank" th:field="*{rank}"
+						th:with="type=${@dict.getType('system_rank')}" required>
+						<option value="-1">非定级</option>
+						<option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+							th:value="${dict.dictValue}"></option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">定级系统名称：</label>
+				<div class="col-sm-8">
+					<input name="rankGroupname" th:field="*{rankGroupname}"
+						class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">集成厂商：</label>
+				<div class="col-sm-8">
+					<input name="vendor" th:field="*{vendor}" class="form-control"
+						type="text">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">分管部门：</label>
+				<div class="col-sm-8">
+					<input name="management" th:field="*{management}"
+						class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">系统分布：</label>
+				<div class="col-sm-8">
+					<input name="distribution" th:field="*{distribution}"
+						class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">主要功能：</label>
+				<div class="col-sm-8">
+					<textarea name="mainfunction" th:field="*{mainfunction}"
+						class="form-control" maxlength="500" rows="3"></textarea>
+				</div>
+			</div>
+		</form>
+	</div>
+	<th:block th:include="include :: footer" />
+	<script type="text/javascript">
+		var prefix = ctx + "system/resgroup";
+		$("#form-resgroup-edit").validate({
+			focusCleanup : true
+		});
 
-        function submitHandler() {
-            if ($.validate.form()) {
-                $.operate.save(prefix + "/edit", $('#form-resgroup-edit').serialize());
-            }
-        }
-    </script>
+		function submitHandler() {
+			if ($.validate.form()) {
+				$.operate.save(prefix + "/edit", $('#form-resgroup-edit')
+						.serialize(), refreshTree);
+			}
+		}
+
+		/* 修改完数据之后 重新绑定树 */
+		function refreshTree() {
+			window.parent.queryResGroupTree();
+		}
+	</script>
 </body>
 </html>

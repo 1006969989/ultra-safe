@@ -39,9 +39,8 @@
 		<div class="container-div">
 			<div class="row">
 				<div class="col-sm-12 search-collapse">
-					<input type="hidden" id="resId" name="resId"> <input
-						type="hidden" id="parentId" name="parentId">
 					<form id="resgroup-from">
+						<input type="hidden" id="resId" name="resId">
 						<div class="select-list">
 							<ul>
 								<li>
@@ -60,7 +59,7 @@
 								</li>
 								<li>
 									<p>是否涉敏：</p> <select name="issensitivity">
-										<option value="">所有</option>
+										<option value="">请选择</option>
 										<option value="0">否</option>
 										<option value="1">是</option>
 								</select>
@@ -132,17 +131,29 @@
                     field : 'groupName', 
                     title : '业务系统名称'
                 },
+                
+                {
+                    field : 'rank', 
+                    title : '定级',
+                    formatter : function (value, row, index){
+                    	if(value == '-1'){
+                    		return '非定级';
+                    	}
+                    	else {
+                    		return value;
+                    	}
+                    }
+                },
                 {
                     field : 'rankGroupname', 
                     title : '定级系统名称'
                 },
                 {
-                    field : 'rank', 
-                    title : '定级'
-                },
-                {
                     field : 'issensitivity', 
-                    title : '是否涉敏'
+                    title : '是否涉敏',
+                    formatter : function(value,row,index){
+                    	return value == '0'? '否':'是';
+                    }
                 },
                 {
                     field : 'vendor', 
@@ -152,17 +163,23 @@
                     field : 'management', 
                     title : '分管部门'
                 },
-                {
-                    field : 'mainfunction', 
-                    title : '主要功能'
-                },
+                
                 {
                     field : 'distribution', 
                     title : '系统分布'
                 },
                 {
-                    field : 'resgroupuuid', 
-                    title : '业务系统uuid'
+                    field : 'mainfunction', 
+                    title : '主要功能',
+                    formatter : function(value,row,index){
+                    	debugger;
+                    	if(value.length > 10){
+                    		return '<span title =' + value + '>' +  value.substring(0,10) + '...</span>';
+                    	}
+                    	else{
+                            return '<span title =' + value + '>' + value + '</span>';
+                    	}
+                    }
                 },
                 {
                     title: '操作',
@@ -170,7 +187,7 @@
                     formatter: function(value, row, index) {
                         var actions = [];
                         actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.resId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.resId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.resId + '\',queryResGroupTree)"><i class="fa fa-remove"></i>删除</a>');
                         return actions.join('');
                     }
                 }]
@@ -196,7 +213,6 @@
 			
 			function zOnClick(event, treeId, treeNode) {
 				$("#resId").val(treeNode.id);
-				$("#parentId").val(treeNode.pId);
 				$.table.search();
 			}
 		}

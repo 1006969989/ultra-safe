@@ -31,10 +31,21 @@
 			<div class="form-group">
 				<label class="col-sm-3 control-label">是否涉敏：</label>
 				<div class="col-sm-8">
-					<select name="issensitivity" class="form-control">
-						<option value="">所有</option>
+					<select name="issensitivity" class="form-control" required>
+						<option value="">请选择</option>
 						<option value="0">否</option>
 						<option value="1">是</option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">定级：</label>
+				<div class="col-sm-8">
+					<select class="form-control" name="rank"
+						th:with="type=${@dict.getType('system_rank')}" required>
+						<option value="-1">非定级</option>
+						<option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+							th:value="${dict.dictValue}"></option>
 					</select>
 				</div>
 			</div>
@@ -44,18 +55,6 @@
 					<input name="rankGroupname" class="form-control" type="text">
 				</div>
 			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">定级：</label>
-				<div class="col-sm-8">
-					<select class="form-control" name="rank"
-						th:with="type=${@dict.getType('system_rank')}">
-						<option value="">所有</option>
-						<option th:each="dict : ${type}" th:text="${dict.dictLabel}"
-							th:value="${dict.dictValue}"></option>
-					</select>
-				</div>
-			</div>
-
 			<div class="form-group">
 				<label class="col-sm-3 control-label">集成厂商：</label>
 				<div class="col-sm-8">

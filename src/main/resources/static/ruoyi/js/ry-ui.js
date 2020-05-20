@@ -914,7 +914,11 @@ var table = {
                 return url;
             },
             // 删除信息
-            remove: function(id) {
+            /** 
+             *  由于删除需要更新树信息，添加回调函数
+             *  mint 2020/05/20
+             */
+            remove: function(id,callback) {
                 table.set();
                 $.modal.confirm("确定删除该条" + table.options.modalName + "信息吗？", function() {
                     var url = $.common.isEmpty(id) ? table.options.removeUrl : table.options.removeUrl.replace("{id}", id);
@@ -923,6 +927,10 @@ var table = {
                     } else {
                         var data = { "ids": id };
                         $.operate.submit(url, "post", "json", data);
+                    }
+                    debugger;
+                    if (typeof callback == "function") {
+                    	callback();
                     }
                 });
 

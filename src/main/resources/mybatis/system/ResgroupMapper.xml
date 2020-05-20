@@ -47,8 +47,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<include refid="selectResgroupVo" />
 		<where>
 			parent_id != '0' and del_flag = '0'
-			<if test="resId != null "> and res_id = #{resId}</if>
-			<if test="parentId != null "> and parent_id = #{parentId}</if>
+			<if test="resId != null "> and (res_id = #{resId} or parent_id = #{resId}) </if>
+			<!-- <if test="parentId != null "> and parent_id = #{parentId}</if> -->
 			<if test="ancestors != null  and ancestors != ''"> and ancestors = #{ancestors}</if>
 			<if test="groupName != null  and groupName != ''"> and group_name like concat(concat('%', #{groupName}),
 				'%')</if>
@@ -103,7 +103,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<insert id="insertResgroup"
 		parameterType="com.ultrapower.project.system.resgroup.domain.Resgroup">
-		<selectKey keyProperty="resId" order="BEFORE" resultType="Long">
+		<selectKey keyProperty="resId" order="BEFORE"
+			resultType="Long">
 			select seq_sys_resgroup.nextval as resId from DUAL
 		</selectKey>
 		insert into sys_resgroup
