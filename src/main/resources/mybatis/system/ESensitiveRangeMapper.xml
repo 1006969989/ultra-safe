@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ultrapower.project.system.range.mapper.ESensitiveRangeMapper">
+
+	<resultMap type="com.ultrapower.project.system.range.domain.ESensitiveRange" id="ESensitiveRangeResult">
+		<result property="uuid"    column="uuid"    />
+		<result property="subclassuuid"    column="subclassuuid"    />
+		<result property="range"    column="range"    />
+		<result property="locationuuid"    column="locationuuid"    />
+		<result property="data"    column="data"    />
+	</resultMap>
+
+	<sql id="selectESensitiveRangeVo">
+        select uuid, subclassuuid, range, locationuuid, data from e_sensitive_range
+    </sql>
+
+	<select id="selectESensitiveRangeList" parameterType="com.ultrapower.project.system.range.domain.ESensitiveRange" resultMap="ESensitiveRangeResult">
+		<include refid="selectESensitiveRangeVo"/>
+		<where>
+			<if test="subclassuuid != null  and subclassuuid != ''"> and subclassuuid = #{subclassuuid}</if>
+			<if test="range != null  and range != ''"> and range = #{range}</if>
+			<if test="locationuuid != null  and locationuuid != ''"> and locationuuid = #{locationuuid}</if>
+			<if test="data != null  and data != ''"> and data = #{data}</if>
+		</where>
+	</select>
+
+	<select id="selectESensitiveRangeById" parameterType="java.lang.String" resultMap="ESensitiveRangeResult">
+		<include refid="selectESensitiveRangeVo"/>
+		where uuid = #{uuid}
+	</select>
+
+	<insert id="insertESensitiveRange" parameterType="com.ultrapower.project.system.range.domain.ESensitiveRange">
+		<selectKey keyProperty="uuid" resultType="string" order="BEFORE">
+			SELECT seq_e_sensitive_range.NEXTVAL as uuid FROM DUAL
+		</selectKey>
+		insert into e_sensitive_range
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="uuid != null  and uuid != ''">uuid,</if>
+			<if test="subclassuuid != null  and subclassuuid != ''">subclassuuid,</if>
+			<if test="range != null  and range != ''">range,</if>
+			<if test="locationuuid != null  and locationuuid != ''">locationuuid,</if>
+			<if test="data != null  and data != ''">data,</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="uuid != null  and uuid != ''">#{uuid},</if>
+			<if test="subclassuuid != null  and subclassuuid != ''">#{subclassuuid},</if>
+			<if test="range != null  and range != ''">#{range},</if>
+			<if test="locationuuid != null  and locationuuid != ''">#{locationuuid},</if>
+			<if test="data != null  and data != ''">#{data},</if>
+		</trim>
+	</insert>
+
+	<update id="updateESensitiveRange" parameterType="com.ultrapower.project.system.range.domain.ESensitiveRange">
+		update e_sensitive_range
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="subclassuuid != null  and subclassuuid != ''">subclassuuid = #{subclassuuid},</if>
+			<if test="range != null  and range != ''">range = #{range},</if>
+			<if test="locationuuid != null  and locationuuid != ''">locationuuid = #{locationuuid},</if>
+			<if test="data != null  and data != ''">data = #{data},</if>
+		</trim>
+		where uuid = #{uuid}
+	</update>
+
+	<delete id="deleteESensitiveRangeById" parameterType="java.lang.String">
+        delete from e_sensitive_range where uuid = #{uuid}
+    </delete>
+
+	<delete id="deleteESensitiveRangeByIds" parameterType="java.lang.String">
+		delete from e_sensitive_range where uuid in
+		<foreach item="uuid" collection="array" open="(" separator="," close=")">
+			#{uuid}
+		</foreach>
+	</delete>
+
+</mapper>

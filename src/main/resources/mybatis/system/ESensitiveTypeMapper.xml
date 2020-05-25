@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ultrapower.project.system.type.mapper.ESensitiveTypeMapper">
+
+	<resultMap type="com.ultrapower.project.system.type.domain.ESensitiveType" id="ESensitiveTypeResult">
+		<result property="uuid"    column="uuid"    />
+		<result property="typename"    column="typename"    />
+	</resultMap>
+
+	<sql id="selectESensitiveTypeVo">
+        select uuid, typename from e_sensitive_type
+    </sql>
+
+	<select id="selectESensitiveTypeList" parameterType="com.ultrapower.project.system.type.domain.ESensitiveType" resultMap="ESensitiveTypeResult">
+		<include refid="selectESensitiveTypeVo"/>
+		<where>
+			<if test="typename != null  and typename != ''"> and typename like concat(concat('%', #{typename}), '%')</if>
+		</where>
+	</select>
+
+	<select id="selectESensitiveTypeById" parameterType="java.lang.String" resultMap="ESensitiveTypeResult">
+		<include refid="selectESensitiveTypeVo"/>
+		where uuid = #{uuid}
+	</select>
+
+	<insert id="insertESensitiveType" parameterType="com.ultrapower.project.system.type.domain.ESensitiveType">
+		<selectKey keyProperty="uuid" resultType="string" order="BEFORE">
+			SELECT seq_e_sensitive_type.NEXTVAL as uuid FROM DUAL
+		</selectKey>
+		insert into e_sensitive_type
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="uuid != null  and uuid != ''">uuid,</if>
+			<if test="typename != null  and typename != ''">typename,</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="uuid != null  and uuid != ''">#{uuid},</if>
+			<if test="typename != null  and typename != ''">#{typename},</if>
+		</trim>
+	</insert>
+
+	<update id="updateESensitiveType" parameterType="com.ultrapower.project.system.type.domain.ESensitiveType">
+		update e_sensitive_type
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="typename != null  and typename != ''">typename = #{typename},</if>
+		</trim>
+		where uuid = #{uuid}
+	</update>
+
+	<delete id="deleteESensitiveTypeById" parameterType="java.lang.String">
+        delete from e_sensitive_type where uuid = #{uuid}
+    </delete>
+
+	<delete id="deleteESensitiveTypeByIds" parameterType="java.lang.String">
+		delete from e_sensitive_type where uuid in
+		<foreach item="uuid" collection="array" open="(" separator="," close=")">
+			#{uuid}
+		</foreach>
+	</delete>
+
+</mapper>
