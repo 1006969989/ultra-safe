@@ -5,30 +5,30 @@
 </head>
 <body class="white-bg">
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
-	<form class="form-horizontal m" id="form-range-edit" >
-		<input name="uuid"  type="hidden">
+	<form class="form-horizontal m" id="form-range-edit" th:object="${eSensitiveRange}">
+		<input name="uuid" th:field="*{uuid}" type="hidden">
 		<div class="form-group">
 			<label class="col-sm-3 control-label">子类编号：</label>
 			<div class="col-sm-8">
-				<input name="subclassuuid"  class="form-control" type="text" required>
+				<input name="subclassuuid" th:field="*{subclassuuid}" class="form-control" type="text" required>
 			</div>
 		</div>
 		<div class="form-group">
 			<label class="col-sm-3 control-label">范围：</label>
 			<div class="col-sm-8">
-				<input name="range"  class="form-control" type="text" required>
+				<input name="range" th:field="*{range}" class="form-control" type="text" required>
 			</div>
 		</div>
 		<div class="form-group">
 			<label class="col-sm-3 control-label">类别编号：</label>
 			<div class="col-sm-8">
-				<input name="locationuuid"  class="form-control" type="text" required>
+				<input name="locationuuid" th:field="*{locationuuid}" class="form-control" type="text" required>
 			</div>
 		</div>
 		<div class="form-group">
 			<label class="col-sm-3 control-label">对应数据：</label>
 			<div class="col-sm-8">
-				<input name="data"  class="form-control" type="text">
+				<input name="data" th:field="*{data}" class="form-control" type="text">
 			</div>
 		</div>
 	</form>
