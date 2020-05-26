@@ -113,7 +113,7 @@ public class EMatrixDetailController extends BaseController
      */
     @RequiresPermissions("system:matrix:remove")
     @Log(title = "矩阵明细", businessType = BusinessType.DELETE)
-    @PostMapping( "/remove")
+    @PostMapping("/remove")
     @ResponseBody
     public AjaxResult remove(String ids)
     {

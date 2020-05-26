@@ -5,7 +5,7 @@
 <mapper namespace="com.ultrapower.project.system.type.mapper.ESensitiveTypeMapper">
 
 	<resultMap type="com.ultrapower.project.system.type.domain.ESensitiveType" id="ESensitiveTypeResult">
-		<result property="uuid"    column="uuid"    />
+		<id property="uuid"    column="uuid"    />
 		<result property="typename"    column="typename"    />
 	</resultMap>
 

@@ -5,7 +5,7 @@
 <mapper namespace="com.ultrapower.project.system.matrix.mapper.EMatrixDetailMapper">
 
 	<resultMap type="com.ultrapower.project.system.matrix.domain.EMatrixDetail" id="EMatrixDetailResult">
-		<result property="uuid"    column="uuid"    />
+		<id     property="uuid"    column="uuid"    />
 		<result property="nodeUuid"    column="node_uuid"    />
 		<result property="matrixUuid"    column="matrix_uuid"    />
 		<result property="tache"    column="tache"    />
@@ -43,6 +43,9 @@
 	</select>
 
 	<insert id="insertEMatrixDetail" parameterType="com.ultrapower.project.system.matrix.domain.EMatrixDetail">
+		<selectKey keyProperty="uuid" resultType="string" order="BEFORE">
+			SELECT seq_e_matrix_detail.NEXTVAL as uuid FROM DUAL
+		</selectKey>
 		insert into e_matrix_detail
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="uuid != null  and uuid != ''">uuid,</if>
@@ -86,11 +89,11 @@
 		where uuid = #{uuid}
 	</update>
 
-	<delete id="deleteEMatrixDetailById" parameterType="java.lang.String">
+	<delete id="deleteEMatrixDetailById" parameterType="String">
         delete from e_matrix_detail where uuid = #{uuid}
     </delete>
 
-	<delete id="deleteEMatrixDetailByIds" parameterType="java.lang.String">
+	<delete id="deleteEMatrixDetailByIds" parameterType="String">
 		delete from e_matrix_detail where uuid in
 		<foreach item="uuid" collection="array" open="(" separator="," close=")">
 			#{uuid}

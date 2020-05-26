@@ -5,7 +5,7 @@
 <mapper namespace="com.ultrapower.project.system.range.mapper.ESensitiveRangeMapper">
 
 	<resultMap type="com.ultrapower.project.system.range.domain.ESensitiveRange" id="ESensitiveRangeResult">
-		<result property="uuid"    column="uuid"    />
+		<id property="uuid"    column="uuid"    />
 		<result property="subclassuuid"    column="subclassuuid"    />
 		<result property="range"    column="range"    />
 		<result property="locationuuid"    column="locationuuid"    />
