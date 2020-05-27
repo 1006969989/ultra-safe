@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ultrapower.project.system.matrix.mapper.EMatrixDetailMapper">
+
+	<resultMap type="com.ultrapower.project.system.matrix.domain.EMatrixDetail" id="EMatrixDetailResult">
+		<id     property="uuid"    column="uuid"    />
+		<result property="nodeUuid"    column="node_uuid"    />
+		<result property="matrixUuid"    column="matrix_uuid"    />
+		<result property="tache"    column="tache"    />
+		<result property="controlPoint"    column="control_point"    />
+		<result property="nodeContent"    column="node_content"    />
+		<result property="department"    column="department"    />
+		<result property="liableUser"    column="liable_user"    />
+		<result property="calibrateUser"    column="calibrate_user"    />
+		<result property="auditorUser"    column="auditor_user"    />
+	</resultMap>
+
+	<sql id="selectEMatrixDetailVo">
+        select uuid, node_uuid, matrix_uuid, tache, control_point, node_content, department, liable_user, calibrate_user, auditor_user from e_matrix_detail
+    </sql>
+
+	<select id="selectEMatrixDetailList" parameterType="com.ultrapower.project.system.matrix.domain.EMatrixDetail" resultMap="EMatrixDetailResult">
+		<include refid="selectEMatrixDetailVo"/>
+		<where>
+			<if test="uuid != null  and uuid != ''"> and uuid = #{uuid}</if>
+			<if test="nodeUuid != null  and nodeUuid != ''"> and node_uuid = #{nodeUuid}</if>
+			<if test="matrixUuid != null  and matrixUuid != ''"> and matrix_uuid = #{matrixUuid}</if>
+			<if test="tache != null  and tache != ''"> and tache = #{tache}</if>
+			<if test="controlPoint != null  and controlPoint != ''"> and control_point = #{controlPoint}</if>
+			<if test="nodeContent != null  and nodeContent != ''"> and node_content = #{nodeContent}</if>
+			<if test="department != null  and department != ''"> and department = #{department}</if>
+			<if test="liableUser != null  and liableUser != ''"> and liable_user = #{liableUser}</if>
+			<if test="calibrateUser != null  and calibrateUser != ''"> and calibrate_user = #{calibrateUser}</if>
+			<if test="auditorUser != null  and auditorUser != ''"> and auditor_user = #{auditorUser}</if>
+		</where>
+	</select>
+
+	<select id="selectEMatrixDetailById" parameterType="java.lang.String" resultMap="EMatrixDetailResult">
+		<include refid="selectEMatrixDetailVo"/>
+		where uuid = #{uuid}
+	</select>
+
+	<insert id="insertEMatrixDetail" parameterType="com.ultrapower.project.system.matrix.domain.EMatrixDetail">
+		<selectKey keyProperty="uuid" resultType="string" order="BEFORE">
+			SELECT seq_e_matrix_detail.NEXTVAL as uuid FROM DUAL
+		</selectKey>
+		insert into e_matrix_detail
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="uuid != null  and uuid != ''">uuid,</if>
+			<if test="nodeUuid != null  and nodeUuid != ''">node_uuid,</if>
+			<if test="matrixUuid != null  and matrixUuid != ''">matrix_uuid,</if>
+			<if test="tache != null  and tache != ''">tache,</if>
+			<if test="controlPoint != null  and controlPoint != ''">control_point,</if>
+			<if test="nodeContent != null  and nodeContent != ''">node_content,</if>
+			<if test="department != null  and department != ''">department,</if>
+			<if test="liableUser != null  and liableUser != ''">liable_user,</if>
+			<if test="calibrateUser != null  and calibrateUser != ''">calibrate_user,</if>
+			<if test="auditorUser != null  and auditorUser != ''">auditor_user,</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="uuid != null  and uuid != ''">#{uuid},</if>
+			<if test="nodeUuid != null  and nodeUuid != ''">#{nodeUuid},</if>
+			<if test="matrixUuid != null  and matrixUuid != ''">#{matrixUuid},</if>
+			<if test="tache != null  and tache != ''">#{tache},</if>
+			<if test="controlPoint != null  and controlPoint != ''">#{controlPoint},</if>
+			<if test="nodeContent != null  and nodeContent != ''">#{nodeContent},</if>
+			<if test="department != null  and department != ''">#{department},</if>
+			<if test="liableUser != null  and liableUser != ''">#{liableUser},</if>
+			<if test="calibrateUser != null  and calibrateUser != ''">#{calibrateUser},</if>
+			<if test="auditorUser != null  and auditorUser != ''">#{auditorUser},</if>
+		</trim>
+	</insert>
+
+	<update id="updateEMatrixDetail" parameterType="com.ultrapower.project.system.matrix.domain.EMatrixDetail">
+		update e_matrix_detail
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="nodeUuid != null  and nodeUuid != ''">node_uuid = #{nodeUuid},</if>
+			<if test="matrixUuid != null  and matrixUuid != ''">matrix_uuid = #{matrixUuid},</if>
+			<if test="tache != null  and tache != ''">tache = #{tache},</if>
+			<if test="controlPoint != null  and controlPoint != ''">control_point = #{controlPoint},</if>
+			<if test="nodeContent != null  and nodeContent != ''">node_content = #{nodeContent},</if>
+			<if test="department != null  and department != ''">department = #{department},</if>
+			<if test="liableUser != null  and liableUser != ''">liable_user = #{liableUser},</if>
+			<if test="calibrateUser != null  and calibrateUser != ''">calibrate_user = #{calibrateUser},</if>
+			<if test="auditorUser != null  and auditorUser != ''">auditor_user = #{auditorUser},</if>
+		</trim>
+		where uuid = #{uuid}
+	</update>
+
+	<delete id="deleteEMatrixDetailById" parameterType="String">
+        delete from e_matrix_detail where uuid = #{uuid}
+    </delete>
+
+	<delete id="deleteEMatrixDetailByIds" parameterType="String">
+		delete from e_matrix_detail where uuid in
+		<foreach item="uuid" collection="array" open="(" separator="," close=")">
+			#{uuid}
+		</foreach>
+	</delete>
+
+</mapper>
