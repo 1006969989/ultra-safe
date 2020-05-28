@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ultrapower.project.system.physeccabinet.mapper.CabinetMapper">
+
+    <resultMap type="com.ultrapower.project.system.physeccabinet.domain.Cabinet" id="CabinetResult">
+        <result property="uuid"    column="uuid"    />
+        <result property="systemuuid"    column="systemuuid"    />
+        <result property="room"    column="room"    />
+        <result property="cabinet"    column="cabinet"    />
+    </resultMap>
+
+    <sql id="selectCabinetVo">
+        select uuid, systemuuid, room, cabinet from e_rel_system_room_cabinet
+    </sql>
+
+    <select id="selectCabinetList" parameterType="com.ultrapower.project.system.physeccabinet.domain.Cabinet" resultMap="CabinetResult">
+        <include refid="selectCabinetVo"/>
+        <where>
+            <if test="uuid != null  and uuid != ''"> and uuid = #{uuid}</if>
+            <if test="systemuuid != null  and systemuuid != ''"> and systemuuid = #{systemuuid}</if>
+        </where>
+    </select>
+
+    <select id="selectCabinetById" parameterType="java.lang.String" resultMap="CabinetResult">
+        <include refid="selectCabinetVo"/>
+        where uuid = #{uuid}
+    </select>
+
+    <insert id="insertCabinet" parameterType="com.ultrapower.project.system.physeccabinet.domain.Cabinet">
+        <selectKey keyProperty="uuid" resultType="java.lang.String" order="BEFORE">
+            SELECT seq_e_rel_system_room_cabinet.NEXTVAL as uuid FROM DUAL
+        </selectKey>
+        insert into e_rel_system_room_cabinet
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="uuid != null  and uuid != ''">uuid,</if>
+            <if test="systemuuid != null  and systemuuid != ''">systemuuid,</if>
+            <if test="room != null  and room != ''">room,</if>
+            <if test="cabinet != null  and cabinet != ''">cabinet,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="uuid != null  and uuid != ''">#{uuid},</if>
+            <if test="systemuuid != null  and systemuuid != ''">#{systemuuid},</if>
+            <if test="room != null  and room != ''">#{room},</if>
+            <if test="cabinet != null  and cabinet != ''">#{cabinet},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCabinet" parameterType="com.ultrapower.project.system.physeccabinet.domain.Cabinet">
+        update e_rel_system_room_cabinet
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="systemuuid != null  and systemuuid != ''">systemuuid = #{systemuuid},</if>
+            <if test="room != null  and room != ''">room = #{room},</if>
+            <if test="cabinet != null  and cabinet != ''">cabinet = #{cabinet},</if>
+        </trim>
+        where uuid = #{uuid}
+    </update>
+
+    <delete id="deleteCabinetById" parameterType="java.lang.String">
+        delete from e_rel_system_room_cabinet where uuid = #{uuid}
+    </delete>
+
+    <delete id="deleteCabinetByIds" parameterType="java.lang.String">
+        delete from e_rel_system_room_cabinet where uuid in
+        <foreach item="uuid" collection="array" open="(" separator="," close=")">
+            #{uuid}
+        </foreach>
+    </delete>
+    <!-- 一个更新systemuuid为linshi的，将其靠挂在对应系统上   -->
+    <update id="updateCabinetToSys" parameterType="java.lang.String">
+        update e_rel_system_room_cabinet set systemuuid = #{systemuuid}
+        where systemuuid = 'linshi'
+    </update>
+    <!-- 根据systemuuid进行删除   -->
+    <delete id="deleteCabinetBySystemUuid" parameterType="java.lang.String">
+        delete from e_rel_system_room_cabinet where systemuuid = #{systemuuid}
+    </delete>
+
+</mapper>
