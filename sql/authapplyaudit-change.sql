@@ -1,0 +1,3 @@
+-- 修改 e_datasafe_authapply_audit表的create_time和modify_time的数据类型
+alter table e_datasafe_authapply_audit modify create_time DATE;
+alter table e_datasafe_authapply_audit modify modify_time DATE;
