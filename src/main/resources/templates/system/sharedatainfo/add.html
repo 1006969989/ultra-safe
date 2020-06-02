@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('新增系统共享数据')" />
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+	<form class="form-horizontal m" id="form-sharedatainfo-add">
+		<div class="form-group">
+			<p>系统基础信息 ： </p>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label">省份(编码)：</label>
+			<div class="col-sm-8">
+				<input name="province" class="form-control" type="text">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label">系统名称：</label>
+			<div class="col-sm-8">
+				<input name="systemname" class="form-control" type="text">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label">系统所在机房位置：</label>
+			<div class="col-sm-8">
+				<input name="systemlocroom" class="form-control" type="text">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label">系统所在机柜位置：</label>
+			<div class="col-sm-8">
+				<input name="frameworklocation" class="form-control" type="text">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label">系统IP地址：</label>
+			<div class="col-sm-8">
+				<input name="desip" class="form-control" type="text">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label">部署系统所属部门：</label>
+			<div class="col-sm-8">
+				<input name="sourcedepartment" class="form-control" type="text">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label">敏感数据内容：</label>
+			<div class="col-sm-8">
+				<input name="sensitivedata" class="form-control" type="text">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label">源系统维护人：</label>
+			<div class="col-sm-8">
+				<input name="sourcedefendperson" class="form-control" type="text">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label">源系统维护人电话：</label>
+			<div class="col-sm-8">
+				<input name="sourcepersonmobile" class="form-control" type="text">
+			</div>
+		</div>
+		<div class="form-group">
+			<p>共享数据基础信息 ： </p>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label">共享数据编号：</label>
+			<div class="col-sm-8">
+				<input name="sharecode" class="form-control" type="text">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label">共享数据目的系统名称：</label>
+			<div class="col-sm-8">
+				<input name="dessystemname" class="form-control" type="text">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label">共享方式：</label>
+			<div class="col-sm-8">
+				<input name="shareway" class="form-control" type="text">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label">修改时间：</label>
+			<div class="col-sm-8">
+				<input name="modifytime" class="form-control" type="text">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label">所属资源组：</label>
+			<div class="col-sm-8">
+				<input name="groupuuid" class="form-control" type="text" required>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label">是否删除  0 正常  1 已删除：</label>
+			<div class="col-sm-8">
+				<input name="logicdelete" class="form-control" type="text">
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-sm-3 control-label">目的系统责任人：</label>
+			<div class="col-sm-8">
+				<input name="desdefendperson" class="form-control" type="text">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label">目的系统责任人电话：</label>
+			<div class="col-sm-8">
+				<input name="desdefendpersonmobile" class="form-control" type="text">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label">目的责任室经理：</label>
+			<div class="col-sm-8">
+				<input name="desresponsroommanager" class="form-control" type="text">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label">目的责任室经理电话：</label>
+			<div class="col-sm-8">
+				<input name="desresponsroommanagermobile" class="form-control" type="text">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label">目的责任领导人：</label>
+			<div class="col-sm-8">
+				<input name="desresponsroomleader" class="form-control" type="text">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label">目的责任领导人电话：</label>
+			<div class="col-sm-8">
+				<input name="desresponsroomleadermobile" class="form-control" type="text">
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-sm-3 control-label">目的系统所属部门：</label>
+			<div class="col-sm-8">
+				<input name="desdepartment" class="form-control" type="text">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label">共享数据目的系统IP地址：</label>
+			<div class="col-sm-8">
+				<input name="systemip" class="form-control" type="text">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label">共享数据主要内容：</label>
+			<div class="col-sm-8">
+				<input name="sharedata" class="form-control" type="text">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label">共享协议端口：</label>
+			<div class="col-sm-8">
+				<input name="shareport" class="form-control" type="text">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label">是否包含敏感数据  0  否  1  是：</label>
+			<div class="col-sm-8">
+				<input name="iscontainsensitivedata" class="form-control" type="text">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label">数据级别：</label>
+			<div class="col-sm-8">
+				<input name="datalevel" class="form-control" type="text">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label">共享数据使用用途：</label>
+			<div class="col-sm-8">
+				<input name="sharedatause" class="form-control" type="text">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label">向集团报备：</label>
+			<div class="col-sm-8">
+				<input name="upload" class="form-control" type="text">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label">共享数据传输方式：</label>
+			<div class="col-sm-8">
+				<input name="sharedatatransferway" class="form-control" type="text">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label">共享数据类型：</label>
+			<div class="col-sm-8">
+				<select name="sharedatatype" class="form-control m-b" th:with="type=${@dict.getType('share_type')}">
+					<option th:each="dict : ${type}" th:text="${dict.dictValue}" th:value="${dict.dictValue}">
+					</option>
+				</select>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label">共享数据采集点：</label>
+			<div class="col-sm-8">
+				<input name="sharedatacollectpoint" class="form-control" type="text">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label">共享数据依据：</label>
+			<div class="col-sm-8">
+				<input name="sharedataaccordance" class="form-control" type="text">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label">共享数据范围：</label>
+			<div class="col-sm-8">
+				<input name="sharedatascope" class="form-control" type="text">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label">共享数据粒度：</label>
+			<div class="col-sm-8">
+				<input name="sharedatagranularity" class="form-control" type="text">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label">共享数据量级：</label>
+			<div class="col-sm-8">
+				<input name="sharedataorder" class="form-control" type="text">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label">共享数据时限范围：</label>
+			<div class="col-sm-8">
+				<input name="hourlimit" class="form-control" type="text">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label">是否具备告警发现手段：</label>
+			<div class="col-sm-8">
+				<input name="ishasalarm" class="form-control" type="text">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label">是否原始数据：</label>
+			<div class="col-sm-8">
+				<input name="issourcedata" class="form-control" type="text">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label">创建用户编号：</label>
+			<div class="col-sm-8">
+				<input name="createuserid" class="form-control" type="text">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label">修改用户编号：</label>
+			<div class="col-sm-8">
+				<input name="modifyuserid" class="form-control" type="text">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label">备注：</label>
+			<div class="col-sm-8">
+				<input name="description" class="form-control" type="text">
+			</div>
+		</div>
+	</form>
+</div>
+<th:block th:include="include :: footer" />
+<script type="text/javascript">
+	var prefix = ctx + "system/sharedatainfo";
+	$("#form-sharedatainfo-add").validate({
+		focusCleanup: true
+	});
+
+	function submitHandler() {
+		if ($.validate.form()) {
+			$.operate.save(prefix + "/add", $('#form-sharedatainfo-add').serialize());
+		}
+	}
+</script>
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('系统共享数据详情')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-sharedatainfo-edit" th:object="${eSystemsharedataInfo}">
+        <input name="uuid" th:field="*{uuid}" type="hidden">
+        <div class="form-group">
+            <span>系统基础信息</span>
+        </div>
+        <div class="form-group">
+                <span >省份，此处应该是编码：</span>
+                <span th:text="*{province}"></span>
+        </div>
+        <div class="form-group">
+            <span>系统名称：</span>
+            <span th:text="*{systemname}"></span>
+        </div>
+        <div class="form-group">
+            <span>系统IP地址：</span>
+            <span th:text="*{desip}"></span>
+        </div>
+        <div class="form-group">
+            <span>系统所在机房位置：</span>
+            <span th:text="*{systemlocroom}"></span>
+        </div>
+        <div class="form-group">
+            <span>系统所在机柜位置：</span>
+            <span th:text="*{frameworklocation}"></span>
+        </div>
+        <div class="form-group">
+            <span>源系统维护人：</span>
+            <span th:text="*{sourcedefendperson}"></span>
+        </div>
+        <div class="form-group">
+            <span>源系统维护人电话：</span>
+            <span th:text="*{sourcepersonmobile}"></span>
+        </div>
+        <div class="form-group">
+            <span>敏感数据内容：</span>
+            <span th:text="*{sensitivedata}"></span>
+        </div>
+        <hr width="80%" align="center">
+
+        <div class="form-group">
+            <span>系统共享数据信息</span>
+        </div>
+        <div class="form-group">
+            <span>所属资源组：</span>
+            <span th:text="*{groupuuid}"></span>
+        </div>
+        <div class="form-group">
+            <span>共享数据编号：</span>
+            <span th:text="*{sharecode}"></span>
+        </div>
+        <div class="form-group">
+            <span>共享数据目的系统名称：</span>
+            <span th:text="*{dessystemname}"></span>
+        </div>
+        <div class="form-group">
+            <span>目的系统所属部门：</span>
+            <span th:text="*{desdepartment}"></span>
+        </div>
+        <div class="form-group">
+            <span>共享数据目的系统IP地址：</span>
+            <span th:text="*{systemip}"></span>
+        </div>
+        <div class="form-group">
+            <span>共享方式：</span>
+            <span th:text="*{shareway}"></span>
+        </div>
+        <div class="form-group">
+            <span>数据级别：</span>
+            <span th:text="*{datalevel}"></span>
+        </div>
+        <div class="form-group">
+            <span>共享数据主要内容：</span>
+            <span th:text="*{sharedata}"></span>
+        </div>
+        <div class="form-group">
+            <span>共享数据使用用途：</span>
+            <span th:text="*{sharedatause}"></span>
+        </div>
+        <div class="form-group">
+            <span>部署系统所属部门：</span>
+            <span th:text="*{sourcedepartment}"></span>
+        </div>
+        <div class="form-group">
+            <span>向集团报备：</span>
+            <span th:text="*{upload}"></span>
+        </div>
+        <div class="form-group">
+            <span>共享数据量级：</span>
+            <span th:text="*{sharedataorder}"></span>
+        </div>
+        <div class="form-group">
+            <span>共享数据类型：</span>
+            <span th:text="*{sharedatatype}"></span>
+        </div>
+        <div class="form-group">
+            <span>共享数据采集点：</span>
+            <span th:text="*{sharedatacollectpoint}"></span>
+        </div>
+        <div class="form-group">
+            <span>共享数据依据：</span>
+            <span th:text="*{sharedataaccordance}"></span>
+        </div>
+        <div class="form-group">
+            <span>是否包含敏感数据  (0  否  1  是)：</span>
+            <span th:text="*{iscontainsensitivedata}"></span>
+        </div>
+        <div class="form-group">
+            <span>是否具备告警发现手段：</span>
+            <span th:text="*{ishasalarm}"></span>
+        </div>
+        <div class="form-group">
+            <span>是否原始数据：</span>
+            <span th:text="*{issourcedata}"></span>
+        </div>
+        <div class="form-group">
+            <span>备注：</span>
+            <span th:text="*{description}"></span>
+        </div>
+    </form>
+</div>
+</body>
+</html>
