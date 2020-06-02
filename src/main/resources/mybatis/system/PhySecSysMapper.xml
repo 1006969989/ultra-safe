@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ultrapower.project.system.physecsys.mapper.PhySecSysMapper">
+
+    <resultMap type="com.ultrapower.project.system.physecsys.domain.PhySecSys" id="PhySecSysResult">
+        <result property="uuid"    column="uuid"    />
+        <result property="systemname"    column="systemname"    />
+        <result property="cabinetnum"    column="cabinetnum"    />
+        <result property="specificmeasure"    column="specificmeasure"    />
+        <result property="reason"    column="reason"    />
+        <result property="logicdelete"    column="logicdelete"    />
+        <result property="groupuuid"    column="groupuuid"    />
+        <result property="createtime"    column="createtime"    />
+        <result property="modifytime"    column="modifytime"    />
+        <result property="createuserid"    column="createuserid"    />
+        <result property="modifyuserid"    column="modifyuserid"    />
+    </resultMap>
+
+    <sql id="selectPhySecSysVo">
+        select uuid, systemname, cabinetnum, specificmeasure, reason, logicdelete, groupuuid, createtime, modifytime, createuserid, modifyuserid from physical_security_system
+    </sql>
+
+    <select id="selectPhySecSysList" parameterType="java.lang.String" resultMap="PhySecSysResult">
+        <include refid="selectPhySecSysVo"/>
+        <where>
+            <if test="systemname != null  and systemname != ''"> and systemname like concat(concat('%', #{systemname}), '%')</if>
+            <if test="groupuuid != null  and groupuuid != ''"> and groupuuid = #{groupuuid}</if>
+            <if test="createtime != null "> and createtime like concat(concat('%', #{createtime}), '%')</if>
+        </where>
+    </select>
+
+    <select id="selectPhySecSysById" parameterType="java.lang.String" resultMap="PhySecSysResult">
+        <include refid="selectPhySecSysVo"/>
+        where uuid = #{uuid}
+    </select>
+
+    <insert id="insertPhySecSys" parameterType="com.ultrapower.project.system.physecsys.domain.PhySecSys">
+        <!--<selectKey keyProperty="uuid" resultType="String" order="BEFORE">
+            SELECT seq_physical_security_system.NEXTVAL as uuid FROM DUAL
+        </selectKey>-->
+        insert into physical_security_system
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="uuid != null  and uuid != ''">uuid,</if>
+            <if test="systemname != null  and systemname != ''">systemname,</if>
+            <if test="cabinetnum != null  and cabinetnum != ''">cabinetnum,</if>
+            <if test="specificmeasure != null  and specificmeasure != ''">specificmeasure,</if>
+            <if test="reason != null  and reason != ''">reason,</if>
+            <if test="logicdelete != null  and logicdelete != ''">logicdelete,</if>
+            <if test="groupuuid != null  and groupuuid != ''">groupuuid,</if>
+            <if test="createtime != null ">createtime,</if>
+            <if test="modifytime != null ">modifytime,</if>
+            <if test="createuserid != null  and createuserid != ''">createuserid,</if>
+            <if test="modifyuserid != null  and modifyuserid != ''">modifyuserid,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="uuid != null  and uuid != ''">#{uuid},</if>
+            <if test="systemname != null  and systemname != ''">#{systemname},</if>
+            <if test="cabinetnum != null  and cabinetnum != ''">#{cabinetnum},</if>
+            <if test="specificmeasure != null  and specificmeasure != ''">#{specificmeasure},</if>
+            <if test="reason != null  and reason != ''">#{reason},</if>
+            <if test="logicdelete != null  and logicdelete != ''">#{logicdelete},</if>
+            <if test="groupuuid != null  and groupuuid != ''">#{groupuuid},</if>
+            <if test="createtime != null ">#{createtime},</if>
+            <if test="modifytime != null ">#{modifytime},</if>
+            <if test="createuserid != null  and createuserid != ''">#{createuserid},</if>
+            <if test="modifyuserid != null  and modifyuserid != ''">#{modifyuserid},</if>
+        </trim>
+    </insert>
+
+    <update id="updatePhySecSys" parameterType="com.ultrapower.project.system.physecsys.domain.PhySecSys">
+        update physical_security_system
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="systemname != null  and systemname != ''">systemname = #{systemname},</if>
+            <if test="cabinetnum != null  and cabinetnum != ''">cabinetnum = #{cabinetnum},</if>
+            <if test="specificmeasure != null  and specificmeasure != ''">specificmeasure = #{specificmeasure},</if>
+            <if test="reason != null  and reason != ''">reason = #{reason},</if>
+            <if test="logicdelete != null  and logicdelete != ''">logicdelete = #{logicdelete},</if>
+            <if test="groupuuid != null  and groupuuid != ''">groupuuid = #{groupuuid},</if>
+            <if test="createtime != null ">createtime = #{createtime},</if>
+            <if test="modifytime != null ">modifytime = #{modifytime},</if>
+            <if test="createuserid != null  and createuserid != ''">createuserid = #{createuserid},</if>
+            <if test="modifyuserid != null  and modifyuserid != ''">modifyuserid = #{modifyuserid},</if>
+        </trim>
+        where uuid = #{uuid}
+    </update>
+
+    <delete id="deletePhySecSysById" parameterType="java.lang.String">
+        delete from physical_security_system where uuid = #{uuid}
+    </delete>
+
+    <delete id="deletePhySecSysByIds" parameterType="java.lang.String">
+        delete from physical_security_system where uuid in
+        <foreach item="uuid" collection="array" open="(" separator="," close=")">
+            #{uuid}
+        </foreach>
+    </delete>
+
+</mapper>

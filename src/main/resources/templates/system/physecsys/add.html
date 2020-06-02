@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('新增物理安全情况')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <strong>基本信息</strong></br>
+        <form class="form-horizontal m" id="form-physecsys-add">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">选择所属系统：</label>
+                <div class="col-sm-8">
+                    <input id="treeName" class="form-control" type="text" onclick="selectResGroupTree()" value="选取所属系统">
+                    <input name="groupuuid" type="hidden" id="treeId" />
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">系统名称：</label>
+                <div class="col-sm-8">
+                    <input name="systemname" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">机柜数量：</label>
+                <div class="col-sm-8">
+                    <input name="cabinetnum" class="form-control" type="number">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">采取物理安全的具体措施：</label>
+                <div class="col-sm-8">
+                    <input name="specificmeasure" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">未采取物理安全措施的原因：</label>
+                <div class="col-sm-8">
+                    <input name="reason" class="form-control" type="text">
+                </div>
+            </div>
+        </form>
+        <hr>
+        <strong>涉及机柜列表</strong></br>
+        <form id="formForSearch">
+            <div ><input type="text"  name="systemuuid" id="systemuuid" style="display:none "/></div>
+        </form>
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:physeccabinet:add">
+                <i class="fa fa-plus"></i> 添加
+            </a>
+        </div>
+        <div class="col-sm-12 table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+
+
+        <hr>
+        <strong>附件列表</strong></br>
+        <div class="btn-group-sm" id="toolbar2" role="group">
+            <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:physeccabinet:add">
+                <i class="fa fa-plus"></i> 上传
+            </a>
+        </div>
+        <div class="col-sm-12 table-striped">
+            <table id="bootstrap-table2"></table>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "system/physecsys"
+        $("#form-physecsys-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add", $('#form-physecsys-add').serialize());
+            }
+            /*$.ajax({
+                type : "get",
+                url : prefix + "/testAjax",
+                dataType : "json",
+                data : {
+                    articleId:"1aasass"
+                },
+                success : function(data) {
+                    console.log(data);
+                },
+                error : function(data) {
+                    //返回值不是json，走error
+                }
+            });*/
+            //form-physeccabinet-add
+        }
+        $(function() {
+            cabinetList();
+            cabinetList2();
+        });
+
+        function cabinetList(){
+            var prefix = ctx + "system/physeccabinet";
+            var options = {
+                id:"bootstrap-table",
+                toolbar:"toolbar",
+                url: prefix + "/list",
+                createUrl: prefix + "/add/"+"linshi",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                showRefresh:false,//刷新
+                showSearch:false,//查询
+                showColumns:false,//列显示选择
+                showToggle:false,//视图转换
+                modalName: "物理安全情况涉及机柜",
+                columns: [{
+                    checkbox: true
+                },
+                    {
+                        field: 'uuid',
+                        title: '主键',
+                        visible: false
+                    },
+                    {
+                        field: 'room',
+                        title: '机房'
+                    },
+                    {
+                        field: 'cabinet',
+                        title: '机柜'
+                    },
+                    {
+                        title: '操作',
+                        align: 'center',
+                        formatter: function (value, row, index) {
+                            var actions = [];
+                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.uuid + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                            actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.uuid + '\')"><i class="fa fa-remove"></i>删除</a>');
+                            return actions.join('');
+                        }
+                    }
+                ]
+            }
+            $.table.init(options);
+            $("#systemuuid").val("linshi");
+            $.table.search("formForSearch");
+        }
+
+        //列表2
+        function cabinetList2(){
+            var prefix = ctx + "system/physecannex";
+            var options2 = {
+                id:"bootstrap-table2",
+                toolbar:"toolbar2",
+                url: prefix + "/list",
+                createUrl: prefix + "/add/"+"linshi",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                showRefresh:false,//刷新
+                showSearch:false,//查询
+                showColumns:false,//列显示选择
+                showToggle:false,//视图转换
+                modalName: "物理安全情况附件",
+                columns: [{
+                    checkbox: true
+                },
+                    {
+                        field : 'uuid',
+                        title : '主键',
+                        visible: false
+                    },
+                    {
+                        field : 'annex',
+                        title : '附件名称',
+                    },
+                    {
+                        title: '操作',
+                        align: 'center',
+                        formatter: function(value, row, index) {
+                            var actions = [];
+                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="downloadFile(\'' + row.uuid + '\')"><i class="fa fa-download"></i>下载</a> ');
+                            actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.uuid + '\')"><i class="fa fa-remove"></i>删除</a>');
+                            return actions.join('');
+                        }
+                    }]
+            };
+            $.table.init(options2);
+            $.table.search("formForSearch");
+        }
+        /*选择业务系统树*/
+        function selectResGroupTree() {
+            var treeId = $("#treeId").val();
+            var resGroupId = $.common.isEmpty(treeId) ? "1" : $("#treeId")
+                .val();
+            var url = ctx + "system/resgroup/selectResGroupTree/" + resGroupId;
+            var options = {
+                title : '选择父级业务系统',
+                width : "380",
+                url : url,
+                callBack : doSubmit
+            };
+            $.modal.openOptions(options);
+        }
+
+        function doSubmit(index, layero) {
+            var tree = layero.find("iframe")[0].contentWindow.$._tree;
+            if ($.tree.notAllowParents(tree)) {
+                var body = layer.getChildFrame('body', index);
+                $("#treeId").val(body.find('#treeId').val());
+                $("#treeName").val(body.find('#treeName').val());
+                layer.close(index);
+            }
+        }
+        function downloadFile(uuid){
+            window.location.href = prefix + "/download/" + uuid;
+        }
+    </script>
+</body>
+</html>

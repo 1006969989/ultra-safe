@@ -928,7 +928,6 @@ var table = {
                         var data = { "ids": id };
                         $.operate.submit(url, "post", "json", data);
                     }
-                    debugger;
                     if (typeof callback == "function") {
                     	callback();
                     }
@@ -1215,7 +1214,7 @@ var table = {
                     callback: {
                         onClick: options.onClick,                      // 用于捕获节点被点击的事件回调函数
                         onCheck: options.onCheck,                      // 用于捕获 checkbox / radio 被勾选 或 取消勾选的事件回调函数
-                        onDblClick: options.onDblClick                 // 用于捕获鼠标双击之后的事件回调函数
+                        onDblClick: options.onDblClick// 用于捕获鼠标双击之后的事件回调函数
                     },
                     check: options.check,
                     view: options.view,
@@ -1231,6 +1230,10 @@ var table = {
                     }
                     var node = tree.getNodesByParam("id", treeId, null)[0];
                     $.tree.selectByIdName(treeId, node);
+                    
+                    if(typeof options.mycallback == "function"){
+                    	options.mycallback(tree);
+                    }
                 });
             },
             // 搜索节点

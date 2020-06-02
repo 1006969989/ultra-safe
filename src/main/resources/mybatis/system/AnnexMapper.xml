@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ultrapower.project.system.physecannex.mapper.AnnexMapper">
+
+    <resultMap type="com.ultrapower.project.system.physecannex.domain.Annex" id="AnnexResult">
+        <result property="uuid"    column="uuid"    />
+        <result property="systemuuid"    column="systemuuid"    />
+        <result property="annex"    column="annex"    />
+        <result property="ftppath"    column="ftppath"    />
+    </resultMap>
+
+    <sql id="selectAnnexVo">
+        select uuid, systemuuid, annex, ftppath from e_rel_system_annex
+    </sql>
+
+    <select id="selectAnnexList" parameterType="com.ultrapower.project.system.physecannex.domain.Annex" resultMap="AnnexResult">
+        <include refid="selectAnnexVo"/>
+        <where>
+            <if test="uuid != null  and uuid != ''"> and uuid = #{uuid}</if>
+            <if test="systemuuid != null  and systemuuid != ''"> and systemuuid = #{systemuuid}</if>
+            <if test="annex != null  and annex != ''"> and annex = #{annex}</if>
+            <if test="ftppath != null  and ftppath != ''"> and ftppath = #{ftppath}</if>
+        </where>
+    </select>
+
+    <select id="selectAnnexById" parameterType="java.lang.String" resultMap="AnnexResult">
+        <include refid="selectAnnexVo"/>
+        where uuid = #{uuid}
+    </select>
+
+    <insert id="insertAnnex" parameterType="com.ultrapower.project.system.physecannex.domain.Annex">
+        <selectKey keyProperty="uuid" resultType="java.lang.String" order="BEFORE">
+            SELECT seq_e_rel_system_annex.NEXTVAL as uuid FROM DUAL
+        </selectKey>
+        insert into e_rel_system_annex
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="uuid != null  and uuid != ''">uuid,</if>
+            <if test="systemuuid != null  and systemuuid != ''">systemuuid,</if>
+            <if test="annex != null  and annex != ''">annex,</if>
+            <if test="ftppath != null  and ftppath != ''">ftppath,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="uuid != null  and uuid != ''">#{uuid},</if>
+            <if test="systemuuid != null  and systemuuid != ''">#{systemuuid},</if>
+            <if test="annex != null  and annex != ''">#{annex},</if>
+            <if test="ftppath != null  and ftppath != ''">#{ftppath},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAnnex" parameterType="com.ultrapower.project.system.physecannex.domain.Annex">
+        update e_rel_system_annex
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="systemuuid != null  and systemuuid != ''">systemuuid = #{systemuuid},</if>
+            <if test="annex != null  and annex != ''">annex = #{annex},</if>
+            <if test="ftppath != null  and ftppath != ''">ftppath = #{ftppath},</if>
+        </trim>
+        where uuid = #{uuid}
+    </update>
+
+    <delete id="deleteAnnexById" parameterType="java.lang.String">
+        delete from e_rel_system_annex where uuid = #{uuid}
+    </delete>
+
+    <delete id="deleteAnnexByIds" parameterType="java.lang.String">
+        delete from e_rel_system_annex where uuid in
+        <foreach item="uuid" collection="array" open="(" separator="," close=")">
+            #{uuid}
+        </foreach>
+    </delete>
+    <!-- 一个更新systemuuid为linshi的，将其靠挂在对应系统上   -->
+    <update id="updateAnnexToSys" parameterType="java.lang.String">
+        update e_rel_system_annex set systemuuid = #{systemuuid}
+        where systemuuid = 'linshi'
+    </update>
+    <!-- 根据systemuuid进行删除   -->
+    <delete id="deleteAnnexBySystemUuid" parameterType="java.lang.String">
+        delete from e_rel_system_annex where systemuuid = #{systemuuid}
+    </delete>
+
+</mapper>

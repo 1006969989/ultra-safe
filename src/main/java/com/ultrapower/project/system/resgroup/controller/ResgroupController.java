@@ -134,8 +134,17 @@ public class ResgroupController extends BaseController {
 	 * 选择部门树
 	 */
 	@GetMapping("/selectResGroupTree/{resGroupId}")
-	public String selectDeptTree(@PathVariable("resGroupId") Long resGroupId, ModelMap mmap) {
+	public String selectResGroupTree(@PathVariable("resGroupId") Long resGroupId, ModelMap mmap) {
 		mmap.put("resgroup", resgroupService.selectResgroupById(resGroupId));
 		return prefix + "/tree";
+	}
+
+	/**
+	 * 选择部门树
+	 */
+	@GetMapping("/selectMResGroupTree/{resgroupids}")
+	public String selectResGroupTree(@PathVariable("resgroupids") String resgroupids, ModelMap mmap) {
+		mmap.put("resgroupids", resgroupids);
+		return prefix + "/multichoosetree";
 	}
 }

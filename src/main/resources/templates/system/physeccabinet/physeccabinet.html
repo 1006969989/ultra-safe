@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('物理安全情况涉及机柜列表')" />
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div ><input type="text"  name="systemuuid" id="systemuuid" style="display:none "/></div>
+            </form>
+            <div >
+                <span>系统名称：</span>
+                <span th:text="*{phySecSys.systemname}"></span>
+                <span>涉及机柜数量：</span>
+                <span th:text="*{phySecSys.cabinetnum}"></span>
+                <span id="getUuid" style="display:none " th:text="*{phySecSys.uuid}"></span>
+            </div>
+
+        </div>
+
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <strong>机柜列表</strong></br>
+            <a class="btn btn-success" id="addCabinetButton" onclick="$.operate.add()" shiro:hasPermission="datasafe:physeccabinet:add">
+                <i class="fa fa-plus"></i> 添加
+            </a>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer" />
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('system:physeccabinet:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('system:physeccabinet:remove')}]];
+    var prefix = ctx + "system/physeccabinet";
+
+    $(function() {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add/"+$("#getUuid").text(),
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            showRefresh:false,//刷新
+            showSearch:false,//查询
+            showColumns:false,//列显示选择
+            showToggle:false,//视图转换
+            modalName: "物理安全情况涉及机柜",
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field : 'uuid',
+                    title : '主键',
+                    visible: false
+                },
+                {
+                    field : 'room',
+                    title : '机房'
+                },
+                {
+                    field : 'cabinet',
+                    title : '机柜'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.uuid + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.uuid + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+        };
+
+        $.table.init(options);
+        // systemuuid getUuid
+        $("#systemuuid").val($("#getUuid").text());
+        $.table.search();
+    });
+    /*function addCabinet(){
+        var getUuid = $("#getUuid").text();
+        var url = prefix + "/add/" + getUuid;
+        var options = {
+            title : '新增物理安全情况涉及机柜',
+            url : url
+        };
+        $.modal.openOptions(options);
+    }*/
+</script>
+</body>
+</html>
