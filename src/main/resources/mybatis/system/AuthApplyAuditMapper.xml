@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ultrapower.project.system.authapplyaudit.mapper.AuthApplyAuditMapper">
+
+    <resultMap type="com.ultrapower.project.system.authapplyaudit.domain.AuthApplyAudit" id="AuthApplyAuditResult">
+        <result property="uuid"    column="uuid"    />
+        <result property="person"    column="person"    />
+        <result property="systemAuth"    column="system_auth"    />
+        <result property="appAuth"    column="app_auth"    />
+        <result property="authApplyRec"    column="auth_apply_rec"    />
+        <result property="authApplyImg"    column="auth_apply_img"    />
+        <result property="remark"    column="remark"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createUserid"    column="create_userid"    />
+        <result property="modifyTime"    column="modify_time"    />
+        <result property="modifyUserid"    column="modify_userid"    />
+        <result property="logicdelete"    column="logicdelete"    />
+        <result property="groupuuid"    column="groupuuid"    />
+    </resultMap>
+
+    <sql id="selectAuthApplyAuditVo">
+        select uuid, person, system_auth, app_auth, auth_apply_rec, auth_apply_img, remark, create_time, create_userid, modify_time, modify_userid, logicdelete, groupuuid from e_datasafe_authapply_audit
+    </sql>
+
+    <select id="selectAuthApplyAuditList" parameterType="com.ultrapower.project.system.authapplyaudit.domain.AuthApplyAudit" resultMap="AuthApplyAuditResult">
+        <include refid="selectAuthApplyAuditVo"/>
+        <where>
+            <if test="uuid != null  and uuid != ''">
+                and uuid = #{uuid}
+            </if>
+            <if test="person != null  and person != ''">
+                and person like concat(concat('%', #{person}), '%')
+            </if>
+            <if test="systemAuth != null  and systemAuth != ''">
+                and system_auth = #{systemAuth}
+            </if>
+            <if test="appAuth != null  and appAuth != ''">
+                and app_auth = #{appAuth}
+            </if>
+            <if test="authApplyRec != null  and authApplyRec != ''">
+                and auth_apply_rec = #{authApplyRec}
+            </if>
+            <if test="authApplyImg != null  and authApplyImg != ''">
+                and auth_apply_img = #{authApplyImg}
+            </if>
+            <if test="createUserid != null  and createUserid != ''">
+                and create_userid = #{createUserid}
+            </if>
+            <if test="modifyTime != null  and modifyTime != ''">
+                and modify_time = #{modifyTime}
+            </if>
+            <if test="modifyUserid != null  and modifyUserid != ''">
+                and modify_userid = #{modifyUserid}
+            </if>
+            <if test="logicdelete != null  and logicdelete != ''">
+                and logicdelete = #{logicdelete}
+            </if>
+            <if test="groupuuid != null  and groupuuid != ''">
+                and groupuuid = #{groupuuid}
+            </if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                and create_time >= to_date(#{params.beginTime},'yyyy-MM-dd')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                and create_time &lt;= to_date(#{params.endTime},'yyyy-MM-dd')
+            </if>
+        </where>
+    </select>
+
+    <select id="selectAuthApplyAuditById" parameterType="java.lang.String" resultMap="AuthApplyAuditResult">
+        <include refid="selectAuthApplyAuditVo"/>
+        where uuid = #{uuid}
+    </select>
+
+    <insert id="insertAuthApplyAudit" parameterType="com.ultrapower.project.system.authapplyaudit.domain.AuthApplyAudit">
+        <selectKey keyProperty="uuid" resultType="string" order="BEFORE">
+            SELECT seq_e_datasafe_authapply_audit.NEXTVAL as uuid FROM DUAL
+        </selectKey>
+        insert into e_datasafe_authapply_audit
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="uuid != null  and uuid != ''">uuid,</if>
+            <if test="person != null  and person != ''">person,</if>
+            <if test="systemAuth != null  and systemAuth != ''">system_auth,</if>
+            <if test="appAuth != null  and appAuth != ''">app_auth,</if>
+            <if test="authApplyRec != null  and authApplyRec != ''">auth_apply_rec,</if>
+            <if test="authApplyImg != null  and authApplyImg != ''">auth_apply_img,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="createUserid != null  and createUserid != ''">create_userid,</if>
+            <if test="modifyTime != null">modify_time,</if>
+            <if test="modifyUserid != null  and modifyUserid != ''">modify_userid,</if>
+            <if test="logicdelete != null  and logicdelete != ''">logicdelete,</if>
+            <if test="groupuuid != null  and groupuuid != ''">groupuuid</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="uuid != null  and uuid != ''">#{uuid},</if>
+            <if test="person != null  and person != ''">#{person},</if>
+            <if test="systemAuth != null  and systemAuth != ''">#{systemAuth},</if>
+            <if test="appAuth != null  and appAuth != ''">#{appAuth},</if>
+            <if test="authApplyRec != null  and authApplyRec != ''">#{authApplyRec},</if>
+            <if test="authApplyImg != null  and authApplyImg != ''">#{authApplyImg},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="createUserid != null  and createUserid != ''">#{createUserid},</if>
+            <if test="modifyTime != null">#{modifyTime},</if>
+            <if test="modifyUserid != null  and modifyUserid != ''">#{modifyUserid},</if>
+            <if test="logicdelete != null  and logicdelete != ''">#{logicdelete},</if>
+            <if test="groupuuid != null  and groupuuid != ''">#{groupuuid}</if>
+         </trim>
+    </insert>
+
+    <update id="updateAuthApplyAudit" parameterType="com.ultrapower.project.system.authapplyaudit.domain.AuthApplyAudit">
+        update e_datasafe_authapply_audit
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="person != null  and person != ''">person = #{person},</if>
+            <if test="systemAuth != null  and systemAuth != ''">system_auth = #{systemAuth},</if>
+            <if test="appAuth != null  and appAuth != ''">app_auth = #{appAuth},</if>
+            <if test="authApplyRec != null  and authApplyRec != ''">auth_apply_rec = #{authApplyRec},</if>
+            <if test="authApplyImg != null  and authApplyImg != ''">auth_apply_img = #{authApplyImg},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+            <if test="modifyTime != null">modify_time = #{modifyTime},</if>
+            <if test="modifyUserid != null  and modifyUserid != ''">modify_userid = #{modifyUserid},</if>
+            <if test="logicdelete != null  and logicdelete != ''">logicdelete = #{logicdelete},</if>
+            <if test="groupuuid != null  and groupuuid != ''">groupuuid = #{groupuuid},</if>
+        </trim>
+        where uuid = #{uuid}
+    </update>
+
+    <delete id="deleteAuthApplyAuditById" parameterType="java.lang.String">
+        delete from e_datasafe_authapply_audit where uuid = #{uuid}
+    </delete>
+
+    <delete id="deleteAuthApplyAuditByIds" parameterType="java.lang.String">
+        delete from e_datasafe_authapply_audit where uuid in
+        <foreach item="uuid" collection="array" open="(" separator="," close=")">
+            #{uuid}
+        </foreach>
+    </delete>
+
+    <select id="selectAuthApplyAuditListByIds" parameterType="java.lang.String" resultMap="AuthApplyAuditResult">
+        <include refid="selectAuthApplyAuditVo"/>
+        where uuid in
+        <foreach item="uuid" collection="array" open="(" separator="," close=")">
+            #{uuid}
+        </foreach>
+    </select>
+
+</mapper>
