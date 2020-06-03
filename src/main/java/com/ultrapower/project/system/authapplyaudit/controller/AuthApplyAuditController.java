@@ -123,13 +123,17 @@ public class AuthApplyAuditController extends BaseController
         try {
             if (authApplyAudit == null) {
                 authApplyAudit = new AuthApplyAudit();
-            } /*else if (authApplyAudit.getAuthApplyImg() != null && !"".equals(authApplyAudit.getAuthApplyImg())) {
-                ClassPathResource classPathResource = new ClassPathResource(authApplyAudit.getAuthApplyImg());
-                File imgFile = classPathResource.getFile();
-                if (imgFile.exists() && !imgFile.isDirectory()) {
-                    authApplyAudit.setAuthApplyImg(imgFile.getPath());
+            } else {
+                if(authApplyAudit.getAuthApplyImg() != null && !"".equals(authApplyAudit.getAuthApplyImg())){
+                    String imgPath = authApplyAudit.getAuthApplyImg();
+                    if(imgPath.indexOf("static") != -1){
+                        imgPath = imgPath.substring(7,imgPath.length());
+                        mmap.put("imgPath",imgPath);
+                    }else {
+                        mmap.put("imgPath",authApplyAudit.getAuthApplyImg());
+                    }
                 }
-            }*/
+            }
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -150,11 +154,19 @@ public class AuthApplyAuditController extends BaseController
             String msg = "不存在这条数据";
             return error(msg);
         }
-
+        //原来的图片
+        String originalImgPath = audit.getAuthApplyImg();
         try{
             //上传图片
             if(file != null){
                 uploadImg(file,authApplyAudit);
+                //判断有没有修改图片，有就删除原来的图片
+                String originalFilename = file.getOriginalFilename();
+                if(originalFilename != null && !"".equals(originalFilename)){
+                    if(originalImgPath != null && !"".equals(originalImgPath)){
+                        deleteImg(originalImgPath);
+                    }
+                }
             }
             return toAjax(authApplyAuditService.updateAuthApplyAudit(authApplyAudit));
         }catch (Exception e){
@@ -183,7 +195,6 @@ public class AuthApplyAuditController extends BaseController
                     continue;
                 }
                 ClassPathResource classPathResource = new ClassPathResource(imgUrl);
-                //InputStream in = classPathResource.getInputStream();
                 if(classPathResource.exists()){
                     //删除上传的图片
                     File file = classPathResource.getFile();
@@ -223,6 +234,21 @@ public class AuthApplyAuditController extends BaseController
             // 保存resources目录下的图片路径
             String imgUrl = "static/img/authapplyaudit/" + fileName;
             authApplyAudit.setAuthApplyImg(imgUrl);
+        }
+    }
+
+    public void deleteImg(String imgPath) throws Exception{
+        // 图片上传的路径
+        if(imgPath == null || "".equals(imgPath)){
+            return;
+        }
+        ClassPathResource classPathResource = new ClassPathResource(imgPath);
+        if(classPathResource.exists()){
+            //删除上传的图片
+            File file = classPathResource.getFile();
+            if(file.exists() && !file.isDirectory()){
+                file.delete();
+            }
         }
     }
 }
