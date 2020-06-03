@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<meta charset="UTF-8">
+<head>
+    <th:block th:include="include :: header('修改责任书和保密协议签署情况')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <strong>基础信息</strong></br>
+        <hr>
+        <input id="getUuid" name="uuid" th:field="*{lettersSign.uuid}" type="hidden">
+        <div class="form-group">
+            <span>人员：</span>
+            <span th:text="*{lettersSign.personName}"></span>
+            <span>归属公司：</span>
+            <span th:text="*{lettersSign.company}"></span>
+            <span>归属部门：</span>
+            <span th:text="*{lettersSign.department}"></span>
+        </div>
+        <div class="form-group">
+        <hr>
+        <strong>保密协议列表</strong></br>
+        <div class="btn-group-sm" id="toolbar1" role="group">
+        </div>
+        <div class="col-sm-12 table-striped">
+            <table id="bootstrap-table1"></table>
+        </div>
+        </div>
+        <div class="form-group">
+        <hr >
+        <strong>安全责任书列表</strong></br>
+        <div class="btn-group-sm" id="toolbar2" role="group">
+        </div>
+        <div class="col-sm-12 table-striped">
+            <table id="bootstrap-table2"></table>
+        </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "system/sign";
+        $("#form-sign-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+        }
+
+        $(function() {
+            secretLettersList();
+            respLettersList();
+        });
+
+        function secretLettersList(){
+            var options = {
+                id:"bootstrap-table1",
+                toolbar:"toolbar1",
+                url: prefix + "/secretLettersList/"+$("#getUuid").val(),
+                showRefresh:false,//刷新
+                showSearch:false,//查询
+                showColumns:false,//列显示选择
+                showToggle:false,//视图转换
+                modalName: "保密协议",
+                columns: [{
+                    checkbox: true
+                },
+                    {
+                        field: 'fileName',
+                        title: '文件名'
+                    },
+                    {
+                        field: 'filePath',
+                        title: '文件预览',
+                        formatter: function(value, row, index) {
+                            console.log("/upload/"+encodeURI(value));
+                            return $.table.imageView("/upload/"+encodeURI(value));
+                            //非全屏下图片宽度应750
+                            //return $.table.imageView("/uploadImage/"+encodeURI(value),null,750,null);
+                            //return '<img src="' + value + '" width="150" height="100">';
+
+                        }
+                    },
+                ]
+            }
+            $.table.init(options);
+        }
+
+        //列表2
+        function respLettersList(){
+                var options2 = {
+                id:"bootstrap-table2",
+                toolbar:"toolbar2",
+                url: prefix + "/respLettersList/"+$("#getUuid").val(),
+                showRefresh:false,//刷新
+                showSearch:false,//查询
+                showColumns:false,//列显示选择
+                showToggle:false,//视图转换
+                modalName: "保密协议",
+                columns: [{
+                    checkbox: true
+                },
+                    {
+                        field: 'fileName',
+                        title: '文件名'
+                    },
+                    {
+                        field: 'filePath',
+                        title: '文件预览',
+                        formatter: function(value, row, index) {
+                            console.log("/upload/"+encodeURI(value));
+                            return $.table.imageView("/upload/"+encodeURI(value));
+                        }
+                    },
+
+                ]
+            }
+            $.table.init(options2);
+        }
+    </script>
+</body>
+</html>

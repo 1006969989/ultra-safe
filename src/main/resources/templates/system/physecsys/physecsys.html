@@ -73,7 +73,7 @@
                     <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:physecsys:edit">
                         <i class="fa fa-edit"></i> 修改
                     </a>
-                    <a class="btn btn-success single disabled" onclick="$.operate.detail()" shiro:hasPermission="system:physecsys:add">
+                    <a class="btn btn-success single disabled" onclick="$.operate.detail()">
                         <i class=""></i> 详情页
                     </a>
                     <a class="btn btn-info" onclick="$.table.importExcel()">
@@ -231,8 +231,7 @@
             <div class="col-xs-offset-1">
                 <input type="file" id="file" name="file"/>
                 <div class="mt10 pt5">
-                    <input type="checkbox" id="updateSupport" name="updateSupport" title="如果数据已经存在，更新这条数据。"> 是否更新已经存在的物理安全信息数据
-                    &nbsp;	<a onclick="$.table.importTemplate()" class="btn btn-default btn-xs"><i class="fa fa-file-excel-o"></i> 下载模板</a>
+                    <a onclick="$.table.importTemplate()" class="btn btn-default btn-xs"><i class="fa fa-file-excel-o"></i> 下载模板</a>
                 </div>
                 <font color="red" class="pull-left mt10">
                     提示：仅允许导入“xls”或“xlsx”格式文件！

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('文件上传')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <span id="getUuid" th:text="*{uuid}" style="display: none"></span>
+        <span id="uploadType" th:text="*{uploadType}" style="display: none"></span>
+            <div class="form-group form-horizontal">
+                <span>注意以下文件的添加,针对重名文件会覆盖</span><br>
+                <hr>
+                <label class="col-sm-3 control-label">选择文件：</label>
+                <div class="col-sm-8">
+                    <input id="files" name="files" class="form-control" type="file" multiple>
+                </div>
+            </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "system/sign"
+        $("#form-sign-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler(){
+                UploadFile();
+        }
+        function UploadFile() {
+            var formData = new FormData();
+            if ($('#files')[0].files[0] == null) {
+                $.modal.alertWarning("请先选择待上传文件");
+                return false;
+            }
+                formData.append('uuid', $("#getUuid").text());
+                formData.append('uploadType', $("#uploadType").text());
+                //文件准备
+                for (var i = 0; i < $('#files')[0].files.length; i++) {
+                    formData.append('files', $('#files')[0].files[i]);
+                }
+                $.ajax({
+                    url: prefix + "/addLetters",
+                    type: 'post',
+                    cache: false,
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    dataType: "json",
+                    success: function (result) {
+                        $.operate.successCallback(result);
+                    }
+                });
+        }
+    </script>
+</body>
+</html>

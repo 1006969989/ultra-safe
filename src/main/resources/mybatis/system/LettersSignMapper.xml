@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ultrapower.project.system.sign.mapper.LettersSignMapper">
+
+    <resultMap type="com.ultrapower.project.system.sign.domain.LettersSign" id="LettersSignResult">
+        <result property="uuid"    column="uuid"    />
+        <result property="personName"    column="person_name"    />
+        <result property="company"    column="company"    />
+        <result property="department"    column="department"    />
+        <result property="secretLetter"    column="secret_letter"    />
+        <result property="respLetter"    column="resp_letter"    />
+        <result property="createtime"    column="create_time"    />
+        <result property="createUserid"    column="create_userid"    />
+        <result property="modifyTime"    column="modify_time"    />
+        <result property="modifyUserid"    column="modify_userid"    />
+        <result property="logicdelete"    column="logicdelete"    />
+        <result property="groupuuid"    column="groupuuid"    />
+    </resultMap>
+
+    <sql id="selectLettersSignVo">
+        select uuid, person_name, company, department, secret_letter, resp_letter, create_time, create_userid, modify_time, modify_userid, logicdelete, groupuuid from e_datasafe_letters_sign
+    </sql>
+
+    <select id="selectLettersSignList" parameterType="com.ultrapower.project.system.sign.domain.LettersSign" resultMap="LettersSignResult">
+        <include refid="selectLettersSignVo"/>
+        <where>
+            <if test="personName != null  and personName != ''"> and person_name like concat(concat('%', #{personName}), '%')</if>
+            <if test="company != null  and company != ''"> and company like concat(concat('%', #{company}), '%')</if>
+            <if test="department != null  and department != ''"> and department like concat(concat('%', #{department}), '%')</if>
+        </where>
+    </select>
+
+    <select id="selectLettersSignById" parameterType="java.lang.String" resultMap="LettersSignResult">
+        <include refid="selectLettersSignVo"/>
+        where uuid = #{uuid}
+    </select>
+
+    <insert id="insertLettersSign" parameterType="com.ultrapower.project.system.sign.domain.LettersSign">
+        <!--<selectKey keyProperty="uuid" resultType="java.lang.String" order="BEFORE">
+            SELECT seq_e_datasafe_letters_sign.NEXTVAL as uuid FROM DUAL
+        </selectKey>-->
+        insert into e_datasafe_letters_sign
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="uuid != null  and uuid != ''">uuid,</if>
+            <if test="personName != null  and personName != ''">person_name,</if>
+            <if test="company != null  and company != ''">company,</if>
+            <if test="department != null  and department != ''">department,</if>
+            <if test="secretLetter != null  and secretLetter != ''">secret_letter,</if>
+            <if test="respLetter != null  and respLetter != ''">resp_letter,</if>
+            <if test="createtime != null  and createtime != ''">create_time,</if>
+            <if test="createUserid != null  and createUserid != ''">create_userid,</if>
+            <if test="modifyTime != null  and modifyTime != ''">modify_time,</if>
+            <if test="modifyUserid != null  and modifyUserid != ''">modify_userid,</if>
+            <if test="logicdelete != null  and logicdelete != ''">logicdelete,</if>
+            <if test="groupuuid != null  and groupuuid != ''">groupuuid,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="uuid != null  and uuid != ''">#{uuid},</if>
+            <if test="personName != null  and personName != ''">#{personName},</if>
+            <if test="company != null  and company != ''">#{company},</if>
+            <if test="department != null  and department != ''">#{department},</if>
+            <if test="secretLetter != null  and secretLetter != ''">#{secretLetter},</if>
+            <if test="respLetter != null  and respLetter != ''">#{respLetter},</if>
+            <if test="createtime != null  and createtime != ''">#{createtime},</if>
+            <if test="createUserid != null  and createUserid != ''">#{createUserid},</if>
+            <if test="modifyTime != null  and modifyTime != ''">#{modifyTime},</if>
+            <if test="modifyUserid != null  and modifyUserid != ''">#{modifyUserid},</if>
+            <if test="logicdelete != null  and logicdelete != ''">#{logicdelete},</if>
+            <if test="groupuuid != null  and groupuuid != ''">#{groupuuid},</if>
+         </trim>
+    </insert>
+
+    <update id="updateLettersSign" parameterType="com.ultrapower.project.system.sign.domain.LettersSign">
+        update e_datasafe_letters_sign
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="personName != null  and personName != ''">person_name = #{personName},</if>
+            <if test="company != null  and company != ''">company = #{company},</if>
+            <if test="department != null  and department != ''">department = #{department},</if>
+            <if test="secretLetter != null  and secretLetter != ''">secret_letter = #{secretLetter},</if>
+            <if test="respLetter != null  and respLetter != ''">resp_letter = #{respLetter},</if>
+            <if test="createtime != null  and createTime != ''">create_time = #{createtime},</if>
+            <if test="createUserid != null  and createUserid != ''">create_userid = #{createUserid},</if>
+            <if test="modifyTime != null  and modifyTime != ''">modify_time = #{modifyTime},</if>
+            <if test="modifyUserid != null  and modifyUserid != ''">modify_userid = #{modifyUserid},</if>
+            <if test="logicdelete != null  and logicdelete != ''">logicdelete = #{logicdelete},</if>
+            <if test="groupuuid != null  and groupuuid != ''">groupuuid = #{groupuuid},</if>
+        </trim>
+        where uuid = #{uuid}
+    </update>
+
+    <delete id="deleteLettersSignById" parameterType="java.lang.String">
+        delete from e_datasafe_letters_sign where uuid = #{uuid}
+    </delete>
+
+    <delete id="deleteLettersSignByIds" parameterType="java.lang.String">
+        delete from e_datasafe_letters_sign where uuid in
+        <foreach item="uuid" collection="array" open="(" separator="," close=")">
+            #{uuid}
+        </foreach>
+    </delete>
+
+</mapper>
