@@ -1,4 +1,14 @@
-﻿-- 菜单 SQL，若有报错，则可能是重名、uuid重复引起，删去已有菜单项再添加
+﻿--字段修改
+ALTER TABLE "DATACHECK"."PHYSICAL_SECURITY_SYSTEM"
+MODIFY ("CREATETIME" DATE )
+MODIFY ("MODIFYTIME" DATE )
+
+ALTER TABLE "DATACHECK"."E_DATASAFE_LETTERS_SIGN"
+MODIFY ("CREATE_TIME" DATE )
+MODIFY ("MODIFY_TIME" DATE )
+
+
+-- 菜单 SQL，若有报错，则可能是重名、uuid重复引起，删去已有菜单项再添加
 insert into sys_menu (menu_id, menu_name, parent_id, order_num, url,menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
 values(3034, '物理安全情况', '2071', '1', '/system/physecsys', 'C', '0', 'system:physecsys:view', '#', 'admin', sysdate, 'wangcong', sysdate, '物理安全情况菜单');
 

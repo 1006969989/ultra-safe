@@ -65,10 +65,12 @@ public class PhySecSysController extends BaseController
     @RequiresPermissions("system:physecsys:list")
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo list(String systemname,String groupuuid,String createtime)
+    public TableDataInfo list(PhySecSys phySecSys)
     {
+        //String systemname,String groupuuid,String createtime
+        System.out.println(phySecSys);
         startPage();
-        List<PhySecSys> list = phySecSysService.selectPhySecSysList(systemname,groupuuid,createtime);
+        List<PhySecSys> list = phySecSysService.selectPhySecSysList(phySecSys);
         return getDataTable(list);
     }
 
@@ -110,9 +112,10 @@ public class PhySecSysController extends BaseController
     @RequiresPermissions("system:physecsys:export")
     @PostMapping("/export")
     @ResponseBody
-    public AjaxResult export(String systemname,String groupuuid,String createtime)
+    public AjaxResult export(PhySecSys phySecSys)
     {
-        List<PhySecSys> list = phySecSysService.selectPhySecSysList(systemname,groupuuid,createtime);
+        //String systemname,String groupuuid,String createtime
+        List<PhySecSys> list = phySecSysService.selectPhySecSysList(phySecSys);
         ExcelUtil<PhySecSys> util = new ExcelUtil<PhySecSys>(PhySecSys.class);
         //util.encodingFilename("物理安全情况表");;  好像失效了
         return util.exportExcel(list, "物理安全情况");
@@ -148,6 +151,7 @@ public class PhySecSysController extends BaseController
         }catch(Exception e) {
             //System.out.println("无临时文件");
         }
+        //注意还要删除文件！
 
         //删除数据库信息
         cabinetService.deleteCabinetBySystemUuid("linshi");
@@ -169,7 +173,7 @@ public class PhySecSysController extends BaseController
         uuid = uuid.replace("-", "");
         phySecSys.setUuid(uuid);
         //getNowDateToString()用于获取当前时间并转化为String
-        phySecSys.setCreatetime(getNowDateToString());
+        phySecSys.setCreatetime(new Date());
         //关于创建者id的获取插入
         //ShiroUtils.getSysUser().getUserId();
         int tag=phySecSysService.insertPhySecSys(phySecSys);
@@ -178,7 +182,6 @@ public class PhySecSysController extends BaseController
             cabinetService.updateCabinetToSys(phySecSys.getUuid());
             annexService.updateAnnexToSys(phySecSys.getUuid());
         }
-
         return toAjax(tag);
     }
 
@@ -202,7 +205,7 @@ public class PhySecSysController extends BaseController
     @ResponseBody
     public AjaxResult editSave(PhySecSys phySecSys)
     {
-        phySecSys.setModifytime(getNowDateToString());
+        phySecSys.setModifytime(new Date());
         return toAjax(phySecSysService.updatePhySecSys(phySecSys));
     }
 
@@ -241,10 +244,10 @@ public class PhySecSysController extends BaseController
 
 
     //工具方法，获取时间并转为String
-    public String getNowDateToString(){
+    /*public String getNowDateToString(){
         Date date = new Date();
         String strDateFormat = "yyyy-MM-dd HH:mm:ss";
         SimpleDateFormat sdf = new SimpleDateFormat(strDateFormat);
         return sdf.format(date);
-    }
+    }*/
 }

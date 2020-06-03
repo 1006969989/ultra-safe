@@ -89,7 +89,7 @@ public class LettersSignController extends BaseController
             System.out.println(lettersSign.toString());
             lettersSign.setUuid(UUID.randomUUID().toString().replace("-", ""));
             lettersSign.setLogicdelete("0");
-            lettersSign.setCreatetime(getNowDateToString());
+            lettersSign.setCreateTime(new Date());
             lettersSignService.insertLettersSign(lettersSign);
         }
         return AjaxResult.success("导入成功");
@@ -138,7 +138,7 @@ public class LettersSignController extends BaseController
         uuid = uuid.replace("-", "");
         lettersSign.setUuid(uuid);
         lettersSign.setLogicdelete("0");
-        System.out.println("lettersSign= "+lettersSign);
+
         //以下是文件上传部分
         String savePath = RuoYiConfig.getUploadPath();//来自配置
         System.out.println("secretLetterFiles大小= "+secretLetterFiles.length);
@@ -152,7 +152,8 @@ public class LettersSignController extends BaseController
         }
         lettersSign.setSecretLetter(savePath+"/secretLetters/"+uuid);
         lettersSign.setRespLetter(savePath+"/respLetters/"+uuid);
-        lettersSign.setCreatetime(getNowDateToString());
+        lettersSign.setCreateTime(new Date());
+        System.out.println("lettersSign= "+lettersSign);
         return toAjax(lettersSignService.insertLettersSign(lettersSign));
     }
 
@@ -175,7 +176,7 @@ public class LettersSignController extends BaseController
     @ResponseBody
     public AjaxResult editSave(LettersSign lettersSign)
     {
-        lettersSign.setModifyTime(getNowDateToString());
+        lettersSign.setModifyTime(new Date());
         return toAjax(lettersSignService.updateLettersSign(lettersSign));
     }
 
@@ -380,11 +381,11 @@ public class LettersSignController extends BaseController
     }
 
     //工具方法，获取时间并转为String
-    public String getNowDateToString(){
+    /*public String getNowDateToString(){
         Date date = new Date();
         String strDateFormat = "yyyy-MM-dd HH:mm:ss";
         SimpleDateFormat sdf = new SimpleDateFormat(strDateFormat);
         return sdf.format(date);
-    }
+    }*/
 
 }

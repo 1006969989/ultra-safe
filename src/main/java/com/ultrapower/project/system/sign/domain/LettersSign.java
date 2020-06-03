@@ -1,9 +1,12 @@
 package com.ultrapower.project.system.sign.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ultrapower.framework.aspectj.lang.annotation.Excel;
 import com.ultrapower.framework.web.domain.BaseEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+
+import java.util.Date;
 
 
 /**
@@ -37,12 +40,12 @@ public class LettersSign extends BaseEntity
     /** 安全责任书 */
     private String respLetter;
 
-    private String createtime;
     /** 创建用户编号 */
     private String createUserid;
 
     /** 修改时间 */
-    private String modifyTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date modifyTime;
 
     /** 修改用户编号 */
     private String modifyUserid;
@@ -109,9 +112,6 @@ public class LettersSign extends BaseEntity
         return respLetter;
     }
 
-    public void setCreatetime(String createtime) { this.createtime = createtime; }
-
-    public String getCreatetime() { return createtime; }
     public void setCreateUserid(String createUserid)
     {
         this.createUserid = createUserid;
@@ -121,12 +121,12 @@ public class LettersSign extends BaseEntity
     {
         return createUserid;
     }
-    public void setModifyTime(String modifyTime)
+    public void setModifyTime(Date modifyTime)
     {
         this.modifyTime = modifyTime;
     }
 
-    public String getModifyTime()
+    public Date getModifyTime()
     {
         return modifyTime;
     }
@@ -167,7 +167,7 @@ public class LettersSign extends BaseEntity
             .append("department", getDepartment())
             .append("secretLetter", getSecretLetter())
             .append("respLetter", getRespLetter())
-            .append("createtime", getCreatetime())
+            .append("createTime", getCreateTime())
             .append("createUserid", getCreateUserid())
             .append("modifyTime", getModifyTime())
             .append("modifyUserid", getModifyUserid())
