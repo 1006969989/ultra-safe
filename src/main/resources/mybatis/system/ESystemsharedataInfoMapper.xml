@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ultrapower.project.system.sharedatainfo.mapper.ESystemsharedataInfoMapper">
+
+	<resultMap type="com.ultrapower.project.system.sharedatainfo.domain.ESystemsharedataInfo" id="ESystemsharedataInfoResult">
+		<result property="uuid"    column="uuid"    />
+		<result property="systemname"    column="systemname"    />
+		<result property="systemlocroom"    column="systemlocroom"    />
+		<result property="frameworklocation"    column="frameworklocation"    />
+		<result property="sharecode"    column="sharecode"    />
+		<result property="desip"    column="desip"    />
+		<result property="shareway"    column="shareway"    />
+		<result property="createtime"    column="createtime"    />
+		<result property="modifytime"    column="modifytime"    />
+		<result property="groupuuid"    column="groupuuid"    />
+		<result property="logicdelete"    column="logicdelete"    />
+		<result property="sourcedepartment"    column="sourcedepartment"    />
+		<result property="sensitivedata"    column="sensitivedata"    />
+		<result property="sourcedefendperson"    column="sourcedefendperson"    />
+		<result property="sourcepersonmobile"    column="sourcepersonmobile"    />
+		<result property="desdefendperson"    column="desdefendperson"    />
+		<result property="desdefendpersonmobile"    column="desdefendpersonmobile"    />
+		<result property="desresponsroommanager"    column="desresponsroommanager"    />
+		<result property="desresponsroommanagermobile"    column="desresponsroommanagermobile"    />
+		<result property="desresponsroomleader"    column="desresponsroomleader"    />
+		<result property="desresponsroomleadermobile"    column="desresponsroomleadermobile"    />
+		<result property="dessystemname"    column="dessystemname"    />
+		<result property="desdepartment"    column="desdepartment"    />
+		<result property="systemip"    column="systemip"    />
+		<result property="sharedata"    column="sharedata"    />
+		<result property="shareport"    column="shareport"    />
+		<result property="iscontainsensitivedata"    column="iscontainsensitivedata"    />
+		<result property="datalevel"    column="datalevel"    />
+		<result property="sharedatause"    column="sharedatause"    />
+		<result property="upload"    column="upload"    />
+		<result property="sharedatatransferway"    column="sharedatatransferway"    />
+		<result property="sharedatatype"    column="sharedatatype"    />
+		<result property="sharedatacollectpoint"    column="sharedatacollectpoint"    />
+		<result property="sharedataaccordance"    column="sharedataaccordance"    />
+		<result property="sharedatascope"    column="sharedatascope"    />
+		<result property="sharedatagranularity"    column="sharedatagranularity"    />
+		<result property="sharedataorder"    column="sharedataorder"    />
+		<result property="hourlimit"    column="hourlimit"    />
+		<result property="ishasalarm"    column="ishasalarm"    />
+		<result property="issourcedata"    column="issourcedata"    />
+		<result property="createuserid"    column="createuserid"    />
+		<result property="modifyuserid"    column="modifyuserid"    />
+		<result property="province"    column="province"    />
+		<result property="description"    column="description"    />
+	</resultMap>
+
+	<sql id="selectESystemsharedataInfoVo">
+        select uuid, systemname, systemlocroom, frameworklocation, sharecode, desip, shareway, createtime, modifytime, groupuuid, logicdelete, sourcedepartment, sensitivedata, sourcedefendperson, sourcepersonmobile, desdefendperson, desdefendpersonmobile, desresponsroommanager, desresponsroommanagermobile, desresponsroomleader, desresponsroomleadermobile, dessystemname, desdepartment, systemip, sharedata, shareport, iscontainsensitivedata, datalevel, sharedatause, upload, sharedatatransferway, sharedatatype, sharedatacollectpoint, sharedataaccordance, sharedatascope, sharedatagranularity, sharedataorder, hourlimit, ishasalarm, issourcedata, createuserid, modifyuserid, province, description from e_systemsharedata_info
+    </sql>
+
+	<select id="selectESystemsharedataInfoList" parameterType="com.ultrapower.project.system.sharedatainfo.domain.ESystemsharedataInfo" resultMap="ESystemsharedataInfoResult">
+		<include refid="selectESystemsharedataInfoVo"/>
+		<where>
+			<if test="systemname != null  and systemname != ''"> and systemname like concat(concat('%', #{systemname}), '%')</if>
+			<if test="systemlocroom != null  and systemlocroom != ''"> and systemlocroom = #{systemlocroom}</if>
+			<if test="frameworklocation != null  and frameworklocation != ''"> and frameworklocation = #{frameworklocation}</if>
+			<if test="sharecode != null  and sharecode != ''"> and sharecode = #{sharecode}</if>
+			<if test="desip != null  and desip != ''"> and desip = #{desip}</if>
+			<if test="shareway != null  and shareway != ''"> and shareway = #{shareway}</if>
+			<if test="createtime != null  and createtime != ''"> and createtime = #{createtime}</if>
+			<if test="modifytime != null  and modifytime != ''"> and modifytime = #{modifytime}</if>
+			<if test="groupuuid != null  and groupuuid != ''"> and groupuuid = #{groupuuid}</if>
+			<if test="logicdelete != null  and logicdelete != ''"> and logicdelete = #{logicdelete}</if>
+			<if test="sourcedepartment != null  and sourcedepartment != ''"> and sourcedepartment = #{sourcedepartment}</if>
+			<if test="sensitivedata != null  and sensitivedata != ''"> and sensitivedata = #{sensitivedata}</if>
+			<if test="sourcedefendperson != null  and sourcedefendperson != ''"> and sourcedefendperson = #{sourcedefendperson}</if>
+			<if test="sourcepersonmobile != null  and sourcepersonmobile != ''"> and sourcepersonmobile = #{sourcepersonmobile}</if>
+			<if test="desdefendperson != null  and desdefendperson != ''"> and desdefendperson = #{desdefendperson}</if>
+			<if test="desdefendpersonmobile != null  and desdefendpersonmobile != ''"> and desdefendpersonmobile = #{desdefendpersonmobile}</if>
+			<if test="desresponsroommanager != null  and desresponsroommanager != ''"> and desresponsroommanager = #{desresponsroommanager}</if>
+			<if test="desresponsroommanagermobile != null  and desresponsroommanagermobile != ''"> and desresponsroommanagermobile = #{desresponsroommanagermobile}</if>
+			<if test="desresponsroomleader != null  and desresponsroomleader != ''"> and desresponsroomleader = #{desresponsroomleader}</if>
+			<if test="desresponsroomleadermobile != null  and desresponsroomleadermobile != ''"> and desresponsroomleadermobile = #{desresponsroomleadermobile}</if>
+			<if test="dessystemname != null  and dessystemname != ''"> and dessystemname like concat(concat('%', #{dessystemname}), '%')</if>
+			<if test="desdepartment != null  and desdepartment != ''"> and desdepartment = #{desdepartment}</if>
+			<if test="systemip != null  and systemip != ''"> and systemip = #{systemip}</if>
+			<if test="sharedata != null  and sharedata != ''"> and sharedata = #{sharedata}</if>
+			<if test="shareport != null  and shareport != ''"> and shareport = #{shareport}</if>
+			<if test="iscontainsensitivedata != null  and iscontainsensitivedata != ''"> and iscontainsensitivedata = #{iscontainsensitivedata}</if>
+			<if test="datalevel != null  and datalevel != ''"> and datalevel = #{datalevel}</if>
+			<if test="sharedatause != null  and sharedatause != ''"> and sharedatause = #{sharedatause}</if>
+			<if test="upload != null  and upload != ''"> and upload = #{upload}</if>
+			<if test="sharedatatransferway != null  and sharedatatransferway != ''"> and sharedatatransferway = #{sharedatatransferway}</if>
+			<if test="sharedatatype != null  and sharedatatype != ''"> and sharedatatype = #{sharedatatype}</if>
+			<if test="sharedatacollectpoint != null  and sharedatacollectpoint != ''"> and sharedatacollectpoint = #{sharedatacollectpoint}</if>
+			<if test="sharedataaccordance != null  and sharedataaccordance != ''"> and sharedataaccordance = #{sharedataaccordance}</if>
+			<if test="sharedatascope != null  and sharedatascope != ''"> and sharedatascope = #{sharedatascope}</if>
+			<if test="sharedatagranularity != null  and sharedatagranularity != ''"> and sharedatagranularity = #{sharedatagranularity}</if>
+			<if test="sharedataorder != null  and sharedataorder != ''"> and sharedataorder = #{sharedataorder}</if>
+			<if test="hourlimit != null  and hourlimit != ''"> and hourlimit = #{hourlimit}</if>
+			<if test="ishasalarm != null  and ishasalarm != ''"> and ishasalarm = #{ishasalarm}</if>
+			<if test="issourcedata != null  and issourcedata != ''"> and issourcedata = #{issourcedata}</if>
+			<if test="createuserid != null  and createuserid != ''"> and createuserid = #{createuserid}</if>
+			<if test="modifyuserid != null  and modifyuserid != ''"> and modifyuserid = #{modifyuserid}</if>
+			<if test="province != null  and province != ''"> and province = #{province}</if>
+			<if test="description != null  and description != ''"> and description = #{description}</if>
+		</where>
+	</select>
+
+	<select id="selectESystemsharedataInfoById" parameterType="java.lang.String" resultMap="ESystemsharedataInfoResult">
+		<include refid="selectESystemsharedataInfoVo"/>
+		where uuid = #{uuid}
+	</select>
+
+	<insert id="insertESystemsharedataInfo" parameterType="com.ultrapower.project.system.sharedatainfo.domain.ESystemsharedataInfo">
+		<selectKey keyProperty="uuid" resultType="string" order="BEFORE">
+			SELECT seq_e_systemsharedata_info.NEXTVAL as uuid FROM DUAL
+		</selectKey>
+		insert into e_systemsharedata_info
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="uuid != null  and uuid != ''">uuid,</if>
+			<if test="systemname != null  and systemname != ''">systemname,</if>
+			<if test="systemlocroom != null  and systemlocroom != ''">systemlocroom,</if>
+			<if test="frameworklocation != null  and frameworklocation != ''">frameworklocation,</if>
+			<if test="sharecode != null  and sharecode != ''">sharecode,</if>
+			<if test="desip != null  and desip != ''">desip,</if>
+			<if test="shareway != null  and shareway != ''">shareway,</if>
+			<if test="createtime != null  and createtime != ''">createtime,</if>
+			<if test="modifytime != null  and modifytime != ''">modifytime,</if>
+			<if test="groupuuid != null  and groupuuid != ''">groupuuid,</if>
+			<if test="logicdelete != null  and logicdelete != ''">logicdelete,</if>
+			<if test="sourcedepartment != null  and sourcedepartment != ''">sourcedepartment,</if>
+			<if test="sensitivedata != null  and sensitivedata != ''">sensitivedata,</if>
+			<if test="sourcedefendperson != null  and sourcedefendperson != ''">sourcedefendperson,</if>
+			<if test="sourcepersonmobile != null  and sourcepersonmobile != ''">sourcepersonmobile,</if>
+			<if test="desdefendperson != null  and desdefendperson != ''">desdefendperson,</if>
+			<if test="desdefendpersonmobile != null  and desdefendpersonmobile != ''">desdefendpersonmobile,</if>
+			<if test="desresponsroommanager != null  and desresponsroommanager != ''">desresponsroommanager,</if>
+			<if test="desresponsroommanagermobile != null  and desresponsroommanagermobile != ''">desresponsroommanagermobile,</if>
+			<if test="desresponsroomleader != null  and desresponsroomleader != ''">desresponsroomleader,</if>
+			<if test="desresponsroomleadermobile != null  and desresponsroomleadermobile != ''">desresponsroomleadermobile,</if>
+			<if test="dessystemname != null  and dessystemname != ''">dessystemname,</if>
+			<if test="desdepartment != null  and desdepartment != ''">desdepartment,</if>
+			<if test="systemip != null  and systemip != ''">systemip,</if>
+			<if test="sharedata != null  and sharedata != ''">sharedata,</if>
+			<if test="shareport != null  and shareport != ''">shareport,</if>
+			<if test="iscontainsensitivedata != null  and iscontainsensitivedata != ''">iscontainsensitivedata,</if>
+			<if test="datalevel != null  and datalevel != ''">datalevel,</if>
+			<if test="sharedatause != null  and sharedatause != ''">sharedatause,</if>
+			<if test="upload != null  and upload != ''">upload,</if>
+			<if test="sharedatatransferway != null  and sharedatatransferway != ''">sharedatatransferway,</if>
+			<if test="sharedatatype != null  and sharedatatype != ''">sharedatatype,</if>
+			<if test="sharedatacollectpoint != null  and sharedatacollectpoint != ''">sharedatacollectpoint,</if>
+			<if test="sharedataaccordance != null  and sharedataaccordance != ''">sharedataaccordance,</if>
+			<if test="sharedatascope != null  and sharedatascope != ''">sharedatascope,</if>
+			<if test="sharedatagranularity != null  and sharedatagranularity != ''">sharedatagranularity,</if>
+			<if test="sharedataorder != null  and sharedataorder != ''">sharedataorder,</if>
+			<if test="hourlimit != null  and hourlimit != ''">hourlimit,</if>
+			<if test="ishasalarm != null  and ishasalarm != ''">ishasalarm,</if>
+			<if test="issourcedata != null  and issourcedata != ''">issourcedata,</if>
+			<if test="createuserid != null  and createuserid != ''">createuserid,</if>
+			<if test="modifyuserid != null  and modifyuserid != ''">modifyuserid,</if>
+			<if test="province != null  and province != ''">province,</if>
+			<if test="description != null  and description != ''">description,</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="uuid != null  and uuid != ''">#{uuid},</if>
+			<if test="systemname != null  and systemname != ''">#{systemname},</if>
+			<if test="systemlocroom != null  and systemlocroom != ''">#{systemlocroom},</if>
+			<if test="frameworklocation != null  and frameworklocation != ''">#{frameworklocation},</if>
+			<if test="sharecode != null  and sharecode != ''">#{sharecode},</if>
+			<if test="desip != null  and desip != ''">#{desip},</if>
+			<if test="shareway != null  and shareway != ''">#{shareway},</if>
+			<if test="createtime != null  and createtime != ''">#{createtime},</if>
+			<if test="modifytime != null  and modifytime != ''">#{modifytime},</if>
+			<if test="groupuuid != null  and groupuuid != ''">#{groupuuid},</if>
+			<if test="logicdelete != null  and logicdelete != ''">#{logicdelete},</if>
+			<if test="sourcedepartment != null  and sourcedepartment != ''">#{sourcedepartment},</if>
+			<if test="sensitivedata != null  and sensitivedata != ''">#{sensitivedata},</if>
+			<if test="sourcedefendperson != null  and sourcedefendperson != ''">#{sourcedefendperson},</if>
+			<if test="sourcepersonmobile != null  and sourcepersonmobile != ''">#{sourcepersonmobile},</if>
+			<if test="desdefendperson != null  and desdefendperson != ''">#{desdefendperson},</if>
+			<if test="desdefendpersonmobile != null  and desdefendpersonmobile != ''">#{desdefendpersonmobile},</if>
+			<if test="desresponsroommanager != null  and desresponsroommanager != ''">#{desresponsroommanager},</if>
+			<if test="desresponsroommanagermobile != null  and desresponsroommanagermobile != ''">#{desresponsroommanagermobile},</if>
+			<if test="desresponsroomleader != null  and desresponsroomleader != ''">#{desresponsroomleader},</if>
+			<if test="desresponsroomleadermobile != null  and desresponsroomleadermobile != ''">#{desresponsroomleadermobile},</if>
+			<if test="dessystemname != null  and dessystemname != ''">#{dessystemname},</if>
+			<if test="desdepartment != null  and desdepartment != ''">#{desdepartment},</if>
+			<if test="systemip != null  and systemip != ''">#{systemip},</if>
+			<if test="sharedata != null  and sharedata != ''">#{sharedata},</if>
+			<if test="shareport != null  and shareport != ''">#{shareport},</if>
+			<if test="iscontainsensitivedata != null  and iscontainsensitivedata != ''">#{iscontainsensitivedata},</if>
+			<if test="datalevel != null  and datalevel != ''">#{datalevel},</if>
+			<if test="sharedatause != null  and sharedatause != ''">#{sharedatause},</if>
+			<if test="upload != null  and upload != ''">#{upload},</if>
+			<if test="sharedatatransferway != null  and sharedatatransferway != ''">#{sharedatatransferway},</if>
+			<if test="sharedatatype != null  and sharedatatype != ''">#{sharedatatype},</if>
+			<if test="sharedatacollectpoint != null  and sharedatacollectpoint != ''">#{sharedatacollectpoint},</if>
+			<if test="sharedataaccordance != null  and sharedataaccordance != ''">#{sharedataaccordance},</if>
+			<if test="sharedatascope != null  and sharedatascope != ''">#{sharedatascope},</if>
+			<if test="sharedatagranularity != null  and sharedatagranularity != ''">#{sharedatagranularity},</if>
+			<if test="sharedataorder != null  and sharedataorder != ''">#{sharedataorder},</if>
+			<if test="hourlimit != null  and hourlimit != ''">#{hourlimit},</if>
+			<if test="ishasalarm != null  and ishasalarm != ''">#{ishasalarm},</if>
+			<if test="issourcedata != null  and issourcedata != ''">#{issourcedata},</if>
+			<if test="createuserid != null  and createuserid != ''">#{createuserid},</if>
+			<if test="modifyuserid != null  and modifyuserid != ''">#{modifyuserid},</if>
+			<if test="province != null  and province != ''">#{province},</if>
+			<if test="description != null  and description != ''">#{description},</if>
+		</trim>
+	</insert>
+
+	<update id="updateESystemsharedataInfo" parameterType="com.ultrapower.project.system.sharedatainfo.domain.ESystemsharedataInfo">
+		update e_systemsharedata_info
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="systemname != null  and systemname != ''">systemname = #{systemname},</if>
+			<if test="systemlocroom != null  and systemlocroom != ''">systemlocroom = #{systemlocroom},</if>
+			<if test="frameworklocation != null  and frameworklocation != ''">frameworklocation = #{frameworklocation},</if>
+			<if test="sharecode != null  and sharecode != ''">sharecode = #{sharecode},</if>
+			<if test="desip != null  and desip != ''">desip = #{desip},</if>
+			<if test="shareway != null  and shareway != ''">shareway = #{shareway},</if>
+			<if test="createtime != null  and createtime != ''">createtime = #{createtime},</if>
+			<if test="modifytime != null  and modifytime != ''">modifytime = #{modifytime},</if>
+			<if test="groupuuid != null  and groupuuid != ''">groupuuid = #{groupuuid},</if>
+			<if test="logicdelete != null  and logicdelete != ''">logicdelete = #{logicdelete},</if>
+			<if test="sourcedepartment != null  and sourcedepartment != ''">sourcedepartment = #{sourcedepartment},</if>
+			<if test="sensitivedata != null  and sensitivedata != ''">sensitivedata = #{sensitivedata},</if>
+			<if test="sourcedefendperson != null  and sourcedefendperson != ''">sourcedefendperson = #{sourcedefendperson},</if>
+			<if test="sourcepersonmobile != null  and sourcepersonmobile != ''">sourcepersonmobile = #{sourcepersonmobile},</if>
+			<if test="desdefendperson != null  and desdefendperson != ''">desdefendperson = #{desdefendperson},</if>
+			<if test="desdefendpersonmobile != null  and desdefendpersonmobile != ''">desdefendpersonmobile = #{desdefendpersonmobile},</if>
+			<if test="desresponsroommanager != null  and desresponsroommanager != ''">desresponsroommanager = #{desresponsroommanager},</if>
+			<if test="desresponsroommanagermobile != null  and desresponsroommanagermobile != ''">desresponsroommanagermobile = #{desresponsroommanagermobile},</if>
+			<if test="desresponsroomleader != null  and desresponsroomleader != ''">desresponsroomleader = #{desresponsroomleader},</if>
+			<if test="desresponsroomleadermobile != null  and desresponsroomleadermobile != ''">desresponsroomleadermobile = #{desresponsroomleadermobile},</if>
+			<if test="dessystemname != null  and dessystemname != ''">dessystemname = #{dessystemname},</if>
+			<if test="desdepartment != null  and desdepartment != ''">desdepartment = #{desdepartment},</if>
+			<if test="systemip != null  and systemip != ''">systemip = #{systemip},</if>
+			<if test="sharedata != null  and sharedata != ''">sharedata = #{sharedata},</if>
+			<if test="shareport != null  and shareport != ''">shareport = #{shareport},</if>
+			<if test="iscontainsensitivedata != null  and iscontainsensitivedata != ''">iscontainsensitivedata = #{iscontainsensitivedata},</if>
+			<if test="datalevel != null  and datalevel != ''">datalevel = #{datalevel},</if>
+			<if test="sharedatause != null  and sharedatause != ''">sharedatause = #{sharedatause},</if>
+			<if test="upload != null  and upload != ''">upload = #{upload},</if>
+			<if test="sharedatatransferway != null  and sharedatatransferway != ''">sharedatatransferway = #{sharedatatransferway},</if>
+			<if test="sharedatatype != null  and sharedatatype != ''">sharedatatype = #{sharedatatype},</if>
+			<if test="sharedatacollectpoint != null  and sharedatacollectpoint != ''">sharedatacollectpoint = #{sharedatacollectpoint},</if>
+			<if test="sharedataaccordance != null  and sharedataaccordance != ''">sharedataaccordance = #{sharedataaccordance},</if>
+			<if test="sharedatascope != null  and sharedatascope != ''">sharedatascope = #{sharedatascope},</if>
+			<if test="sharedatagranularity != null  and sharedatagranularity != ''">sharedatagranularity = #{sharedatagranularity},</if>
+			<if test="sharedataorder != null  and sharedataorder != ''">sharedataorder = #{sharedataorder},</if>
+			<if test="hourlimit != null  and hourlimit != ''">hourlimit = #{hourlimit},</if>
+			<if test="ishasalarm != null  and ishasalarm != ''">ishasalarm = #{ishasalarm},</if>
+			<if test="issourcedata != null  and issourcedata != ''">issourcedata = #{issourcedata},</if>
+			<if test="createuserid != null  and createuserid != ''">createuserid = #{createuserid},</if>
+			<if test="modifyuserid != null  and modifyuserid != ''">modifyuserid = #{modifyuserid},</if>
+			<if test="province != null  and province != ''">province = #{province},</if>
+			<if test="description != null  and description != ''">description = #{description},</if>
+		</trim>
+		where uuid = #{uuid}
+	</update>
+
+	<delete id="deleteESystemsharedataInfoById" parameterType="java.lang.String">
+        delete from e_systemsharedata_info where uuid = #{uuid}
+    </delete>
+
+	<delete id="deleteESystemsharedataInfoByIds" parameterType="java.lang.String">
+		delete from e_systemsharedata_info where uuid in
+		<foreach item="uuid" collection="array" open="(" separator="," close=")">
+			#{uuid}
+		</foreach>
+	</delete>
+
+</mapper>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增责任书和保密协议签署情况')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-sign-add">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">选择所属系统：</label>
+                <div class="col-sm-8">
+                    <input id="treeName" class="form-control" type="text" onclick="selectResGroupTree()" value="选取所属系统">
+                    <input name="groupuuid" type="hidden" id="treeId" />
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">人员：</label>
+                <div class="col-sm-8">
+                    <input id="personName" name="personName" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">归属公司：</label>
+                <div class="col-sm-8">
+                    <input id="company" name="company" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">归属部门：</label>
+                <div class="col-sm-8">
+                    <input id="department" name="department" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <span>注意以下两个文件的添加,针对重名文件会覆盖</span><br>
+                <hr>
+                <label class="col-sm-3 control-label">保密协议：</label>
+                <div class="col-sm-8">
+                    <input id="secretLetterFiles" name="secretLetterFiles" class="form-control" type="file" multiple>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">安全责任书：</label>
+                <div class="col-sm-8">
+                    <input id="respLetterFiles" name="respLetterFiles" class="form-control" type="file" multiple>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "system/sign"
+        $("#form-sign-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                //$.operate.save(prefix + "/add", $('#form-sign-add').serialize());
+                addSignAnddUploadFile()
+            }
+        }
+
+        function addSignAnddUploadFile() {
+            var formData = new FormData();
+            if ($('#secretLetterFiles')[0].files[0] == null) {
+                $.modal.alertWarning("请先选择保密协议文件");
+                return false;
+            }else if ($('#respLetterFiles')[0].files[0] == null) {
+                $.modal.alertWarning("请先选择安全责任书文件");
+                return false;
+            }
+            formData.append('groupuuid', $("#treeId").val());
+            formData.append('personName', $("#personName").val());
+            formData.append('company', $("#company").val());
+            formData.append('department', $("#department").val());
+            //文件准备
+            //formData.append('secretLetterFiles', $('#secretLetterFiles')[0]);
+            //formData.append('respLetterFiles', $('#respLetterFiles')[0]);
+            for(var i=0;i<$('#secretLetterFiles')[0].files.length;i++){
+                formData.append('secretLetterFiles', $('#secretLetterFiles')[0].files[i]);
+            }
+            for(var i=0;i<$('#respLetterFiles')[0].files.length;i++){
+                formData.append('respLetterFiles', $('#respLetterFiles')[0].files[i]);
+            }
+            $.ajax({
+                url: prefix + "/add",
+                type: 'post',
+                cache: false,
+                data: formData,
+                processData: false,
+                contentType: false,
+                dataType: "json",
+                success: function(result) {
+                    $.operate.successCallback(result);
+                }
+            });
+        }
+        /*选择业务系统树*/
+        function selectResGroupTree() {
+            var treeId = $("#treeId").val();
+            var resGroupId = $.common.isEmpty(treeId) ? "1" : $("#treeId")
+                .val();
+            var url = ctx + "system/resgroup/selectResGroupTree/" + resGroupId;
+            var options = {
+                title : '选择父级业务系统',
+                width : "380",
+                url : url,
+                callBack : doSubmit
+            };
+            $.modal.openOptions(options);
+        }
+
+        function doSubmit(index, layero) {
+            var tree = layero.find("iframe")[0].contentWindow.$._tree;
+            if ($.tree.notAllowParents(tree)) {
+                var body = layer.getChildFrame('body', index);
+                $("#treeId").val(body.find('#treeId').val());
+                $("#treeName").val(body.find('#treeName').val());
+                layer.close(index);
+            }
+        }
+    </script>
+</body>
+</html>

@@ -72,7 +72,6 @@ public class PhySecSysController extends BaseController
         return getDataTable(list);
     }
 
-    //新增
     /**
      * 导入物理安全情况列表
      */
@@ -91,7 +90,6 @@ public class PhySecSysController extends BaseController
             //若后续不导入创建时间，则可用getNowDateToString()来获取当前时间并转化为String
             phySecSysService.insertPhySecSys(phySecSys);
         }
-        //这里建议创建工具类来完成批量插入数据  并在成功时返回一个tag以确定事务状态
         return AjaxResult.success("导入成功");
     }
     /**
