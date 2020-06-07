@@ -26,6 +26,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectLettersSignList" parameterType="com.ultrapower.project.system.sign.domain.LettersSign" resultMap="LettersSignResult">
         <include refid="selectLettersSignVo"/>
         <where>
+            logicdelete='0'
             <if test="personName != null  and personName != ''"> and person_name like concat(concat('%', #{personName}), '%')</if>
             <if test="company != null  and company != ''"> and company like concat(concat('%', #{company}), '%')</if>
             <if test="department != null  and department != ''"> and department like concat(concat('%', #{department}), '%')</if>

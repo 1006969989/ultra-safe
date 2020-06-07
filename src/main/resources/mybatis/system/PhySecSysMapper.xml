@@ -33,6 +33,7 @@
     <select id="selectPhySecSysList" parameterType="com.ultrapower.project.system.physecsys.domain.PhySecSys" resultMap="PhySecSysResult">
         <include refid="selectPhySecSysVo"/>
         <where>
+            logicdelete='0'
             <if test="systemname != null  and systemname != ''"> and systemname like concat(concat('%', #{systemname}), '%')</if>
             <if test="groupuuid != null  and groupuuid != ''"> and groupuuid = #{groupuuid}</if>
             <!--<if test="createtime != null "> and createtime like concat(concat('%', #{createtime}), '%')</if>-->

@@ -18,6 +18,7 @@ import com.ultrapower.project.system.physeccabinet.domain.Cabinet;
 import com.ultrapower.project.system.physeccabinet.service.ICabinetService;
 import com.ultrapower.project.system.physecsys.domain.PhySecSys;
 import com.ultrapower.project.system.physecsys.service.IPhySecSysService;
+import com.ultrapower.project.system.sensitivebank.domain.SensitiveBank;
 import com.ultrapower.project.system.user.domain.User;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.ILoggerFactory;
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -112,12 +114,14 @@ public class PhySecSysController extends BaseController
     @RequiresPermissions("system:physecsys:export")
     @PostMapping("/export")
     @ResponseBody
-    public AjaxResult export(PhySecSys phySecSys)
+    public AjaxResult export(String ids)
     {
-        //String systemname,String groupuuid,String createtime
-        List<PhySecSys> list = phySecSysService.selectPhySecSysList(phySecSys);
+        String[] id= Convert.toStrArray(ids);
+        List<PhySecSys> list = new ArrayList<PhySecSys>();
+        for(int i=0;i<id.length;i++){
+            list.add(phySecSysService.selectPhySecSysById(id[i]));
+        }
         ExcelUtil<PhySecSys> util = new ExcelUtil<PhySecSys>(PhySecSys.class);
-        //util.encodingFilename("物理安全情况表");;  好像失效了
         return util.exportExcel(list, "物理安全情况");
     }
 
@@ -174,6 +178,7 @@ public class PhySecSysController extends BaseController
         phySecSys.setUuid(uuid);
         //getNowDateToString()用于获取当前时间并转化为String
         phySecSys.setCreatetime(new Date());
+        phySecSys.setLogicdelete("0");
         //关于创建者id的获取插入
         //ShiroUtils.getSysUser().getUserId();
         int tag=phySecSysService.insertPhySecSys(phySecSys);
@@ -218,8 +223,18 @@ public class PhySecSysController extends BaseController
     @ResponseBody
     public AjaxResult remove(String ids)
     {
-        System.out.println(ids);
-        return toAjax(phySecSysService.deletePhySecSysByIds(ids));
+        //逻辑删除
+        String[] id= Convert.toStrArray(ids);
+        PhySecSys phySecSys=new PhySecSys();
+        phySecSys.setLogicdelete("1");
+        int flag=1;
+        for(int i=0;i<id.length;i++){
+            phySecSys.setUuid(id[i]);
+            if(phySecSysService.updatePhySecSys(phySecSys)!=1){
+                flag=0;
+            }
+        }
+        return toAjax(flag);
     }
 
 

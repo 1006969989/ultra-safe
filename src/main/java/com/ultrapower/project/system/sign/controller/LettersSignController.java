@@ -18,6 +18,7 @@ import com.ultrapower.common.utils.file.FileUploadUtils;
 import com.ultrapower.common.utils.file.FileUtils;
 import com.ultrapower.common.utils.file.MimeTypeUtils;
 import com.ultrapower.common.utils.poi.ExcelUtil;
+import com.ultrapower.common.utils.text.Convert;
 import com.ultrapower.framework.aspectj.lang.annotation.Log;
 import com.ultrapower.framework.aspectj.lang.enums.BusinessType;
 import com.ultrapower.framework.config.RuoYiConfig;
@@ -26,6 +27,7 @@ import com.ultrapower.framework.web.domain.AjaxResult;
 import com.ultrapower.framework.web.page.TableDataInfo;
 import com.ultrapower.project.system.physecannex.domain.Annex;
 import com.ultrapower.project.system.physecsys.domain.PhySecSys;
+import com.ultrapower.project.system.sensitivebank.domain.SensitiveBank;
 import com.ultrapower.project.system.sign.domain.FileInfo;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -110,9 +112,13 @@ public class LettersSignController extends BaseController
     @RequiresPermissions("system:sign:export")
     @PostMapping("/export")
     @ResponseBody
-    public AjaxResult export(LettersSign lettersSign)
+    public AjaxResult export(String ids)
     {
-        List<LettersSign> list = lettersSignService.selectLettersSignList(lettersSign);
+        String[] id= Convert.toStrArray(ids);
+        List<LettersSign> list = new ArrayList<LettersSign>();
+        for(int i=0;i<id.length;i++){
+            list.add(lettersSignService.selectLettersSignById(id[i]));
+        }
         ExcelUtil<LettersSign> util = new ExcelUtil<LettersSign>(LettersSign.class);
         return util.exportExcel(list, "责任安全书及保密协议签署情况");
     }
@@ -189,7 +195,18 @@ public class LettersSignController extends BaseController
     @ResponseBody
     public AjaxResult remove(String ids)
     {
-        return toAjax(lettersSignService.deleteLettersSignByIds(ids));
+        //逻辑删除
+        String[] id= Convert.toStrArray(ids);
+        LettersSign lettersSign=new LettersSign();
+        lettersSign.setLogicdelete("1");
+        int flag=1;
+        for(int i=0;i<id.length;i++){
+            lettersSign.setUuid(id[i]);
+            if(lettersSignService.updateLettersSign(lettersSign)!=1){
+                flag=0;
+            }
+        }
+        return toAjax(flag);
     }
 
     /**

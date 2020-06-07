@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ultrapower.project.system.sensitivebank.mapper.SensitiveBankMapper">
+
+    <resultMap type="com.ultrapower.project.system.sensitivebank.domain.SensitiveBank" id="SensitiveBankResult">
+        <result property="uuid"    column="uuid"    />
+        <result property="provincecode"    column="provincecode"    />
+        <result property="username"    column="username"    />
+        <result property="groupname"    column="groupname"    />
+        <result property="subgroupname"    column="subgroupname"    />
+        <result property="groupnametype"    column="groupnametype"    />
+        <result property="orgpathname"    column="orgpathname"    />
+        <result property="jobrole"    column="jobrole"    />
+        <result property="userid"    column="userid"    />
+        <result property="accountid"    column="accountid"    />
+        <result property="authztype"    column="authztype"    />
+        <result property="accstarttime"    column="accstarttime"    />
+        <result property="accendtime"    column="accendtime"    />
+        <result property="remark"    column="remark"    />
+        <result property="status"    column="status"    />
+        <result property="logicdelete"    column="logicdelete"    />
+        <result property="registdate"    column="registdate"    />
+        <result property="optuser"    column="optuser"    />
+        <result property="modifytime"    column="modifytime"    />
+        <result property="modifyuserid"    column="modifyuserid"    />
+        <result property="groupuuid"    column="groupuuid"    />
+        <result property="operauthz"    column="operauthz"    />
+        <result property="sensitiveauthzcontent"    column="sensitiveauthzcontent"    />
+    </resultMap>
+
+    <sql id="selectSensitiveBankVo">
+        select uuid, provincecode, username, groupname, subgroupname, groupnametype, orgpathname, jobrole, userid, accountid, authztype, accstarttime, accendtime, remark, status, logicdelete, registdate, optuser, modifytime, modifyuserid, groupuuid, operauthz, sensitiveauthzcontent from sensitive_user_subacc
+    </sql>
+
+    <select id="selectSensitiveBankList" parameterType="com.ultrapower.project.system.sensitivebank.domain.SensitiveBank" resultMap="SensitiveBankResult">
+        <include refid="selectSensitiveBankVo"/>
+        <where>
+            logicdelete='0'
+            <if test="username != null  and username != ''"> and username like concat(concat('%', #{username}), '%')</if>
+            <if test="groupname != null  and groupname != ''"> and groupname like concat(concat('%', #{groupname}), '%')</if>
+            <if test="userid != null  and userid != ''"> and userid like concat(concat('%', #{userid}), '%')</if>
+            <if test="accountid != null  and accountid != ''"> and accountid like concat(concat('%', #{accountid}), '%')</if>
+            <if test="accstarttime != null "> and accstarttime &gt;= #{accstarttime}</if>
+            <if test="accendtime != null "> and accendtime &lt;= #{accendtime}</if>
+            <if test="groupuuid != null  and groupuuid != ''"> and groupuuid = #{groupuuid}</if>
+        </where>
+    </select>
+
+    <select id="selectSensitiveBankById" parameterType="java.lang.String" resultMap="SensitiveBankResult">
+        <include refid="selectSensitiveBankVo"/>
+        where uuid = #{uuid}
+    </select>
+
+    <insert id="insertSensitiveBank" parameterType="com.ultrapower.project.system.sensitivebank.domain.SensitiveBank">
+        <selectKey keyProperty="uuid" resultType="java.lang.String" order="BEFORE">
+            SELECT seq_sensitive_user_subacc.NEXTVAL as uuid FROM DUAL
+        </selectKey>
+        insert into sensitive_user_subacc
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="uuid != null  and uuid != ''">uuid,</if>
+            <if test="provincecode != null  and provincecode != ''">provincecode,</if>
+            <if test="username != null  and username != ''">username,</if>
+            <if test="groupname != null  and groupname != ''">groupname,</if>
+            <if test="subgroupname != null  and subgroupname != ''">subgroupname,</if>
+            <if test="groupnametype != null  and groupnametype != ''">groupnametype,</if>
+            <if test="orgpathname != null  and orgpathname != ''">orgpathname,</if>
+            <if test="jobrole != null  and jobrole != ''">jobrole,</if>
+            <if test="userid != null  and userid != ''">userid,</if>
+            <if test="accountid != null  and accountid != ''">accountid,</if>
+            <if test="authztype != null  and authztype != ''">authztype,</if>
+            <if test="accstarttime != null ">accstarttime,</if>
+            <if test="accendtime != null ">accendtime,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+            <if test="status != null  and status != ''">status,</if>
+            <if test="logicdelete != null  and logicdelete != ''">logicdelete,</if>
+            <if test="registdate != null  and registdate != ''">registdate,</if>
+            <if test="optuser != null  and optuser != ''">optuser,</if>
+            <if test="modifytime != null  and modifytime != ''">modifytime,</if>
+            <if test="modifyuserid != null  and modifyuserid != ''">modifyuserid,</if>
+            <if test="groupuuid != null  and groupuuid != ''">groupuuid,</if>
+            <if test="operauthz != null  and operauthz != ''">operauthz,</if>
+            <if test="sensitiveauthzcontent != null  and sensitiveauthzcontent != ''">sensitiveauthzcontent,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="uuid != null  and uuid != ''">#{uuid},</if>
+            <if test="provincecode != null  and provincecode != ''">#{provincecode},</if>
+            <if test="username != null  and username != ''">#{username},</if>
+            <if test="groupname != null  and groupname != ''">#{groupname},</if>
+            <if test="subgroupname != null  and subgroupname != ''">#{subgroupname},</if>
+            <if test="groupnametype != null  and groupnametype != ''">#{groupnametype},</if>
+            <if test="orgpathname != null  and orgpathname != ''">#{orgpathname},</if>
+            <if test="jobrole != null  and jobrole != ''">#{jobrole},</if>
+            <if test="userid != null  and userid != ''">#{userid},</if>
+            <if test="accountid != null  and accountid != ''">#{accountid},</if>
+            <if test="authztype != null  and authztype != ''">#{authztype},</if>
+            <if test="accstarttime != null ">#{accstarttime},</if>
+            <if test="accendtime != null ">#{accendtime},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="logicdelete != null  and logicdelete != ''">#{logicdelete},</if>
+            <if test="registdate != null  and registdate != ''">#{registdate},</if>
+            <if test="optuser != null  and optuser != ''">#{optuser},</if>
+            <if test="modifytime != null  and modifytime != ''">#{modifytime},</if>
+            <if test="modifyuserid != null  and modifyuserid != ''">#{modifyuserid},</if>
+            <if test="groupuuid != null  and groupuuid != ''">#{groupuuid},</if>
+            <if test="operauthz != null  and operauthz != ''">#{operauthz},</if>
+            <if test="sensitiveauthzcontent != null  and sensitiveauthzcontent != ''">#{sensitiveauthzcontent},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSensitiveBank" parameterType="com.ultrapower.project.system.sensitivebank.domain.SensitiveBank">
+        update sensitive_user_subacc
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="provincecode != null  and provincecode != ''">provincecode = #{provincecode},</if>
+            <if test="username != null  and username != ''">username = #{username},</if>
+            <if test="groupname != null  and groupname != ''">groupname = #{groupname},</if>
+            <if test="subgroupname != null  and subgroupname != ''">subgroupname = #{subgroupname},</if>
+            <if test="groupnametype != null  and groupnametype != ''">groupnametype = #{groupnametype},</if>
+            <if test="orgpathname != null  and orgpathname != ''">orgpathname = #{orgpathname},</if>
+            <if test="jobrole != null  and jobrole != ''">jobrole = #{jobrole},</if>
+            <if test="userid != null  and userid != ''">userid = #{userid},</if>
+            <if test="accountid != null  and accountid != ''">accountid = #{accountid},</if>
+            <if test="authztype != null  and authztype != ''">authztype = #{authztype},</if>
+            <if test="accstarttime != null ">accstarttime = #{accstarttime},</if>
+            <if test="accendtime != null ">accendtime = #{accendtime},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+            <if test="status != null  and status != ''">status = #{status},</if>
+            <if test="logicdelete != null  and logicdelete != ''">logicdelete = #{logicdelete},</if>
+            <if test="registdate != null  and registdate != ''">registdate = #{registdate},</if>
+            <if test="optuser != null  and optuser != ''">optuser = #{optuser},</if>
+            <if test="modifytime != null  and modifytime != ''">modifytime = #{modifytime},</if>
+            <if test="modifyuserid != null  and modifyuserid != ''">modifyuserid = #{modifyuserid},</if>
+            <if test="groupuuid != null  and groupuuid != ''">groupuuid = #{groupuuid},</if>
+            <if test="operauthz != null  and operauthz != ''">operauthz = #{operauthz},</if>
+            <if test="sensitiveauthzcontent != null  and sensitiveauthzcontent != ''">sensitiveauthzcontent = #{sensitiveauthzcontent},</if>
+        </trim>
+        where uuid = #{uuid}
+    </update>
+
+    <delete id="deleteSensitiveBankById" parameterType="java.lang.String">
+        delete from sensitive_user_subacc where uuid = #{uuid}
+    </delete>
+
+    <delete id="deleteSensitiveBankByIds" parameterType="java.lang.String">
+        delete from sensitive_user_subacc where uuid in
+        <foreach item="uuid" collection="array" open="(" separator="," close=")">
+            #{uuid}
+        </foreach>
+    </delete>
+
+</mapper>

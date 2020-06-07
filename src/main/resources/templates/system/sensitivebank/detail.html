@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('修改物理安全情况')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <strong>基本信息</strong></br>
+        <form class="form-horizontal m" id="form-physecsys-edit" th:object="${sensitiveBank}">
+            <input name="uuid" id="getUuid" th:field="*{uuid}" type="hidden">
+            <div class="form-group">
+                <span>省份编码：</span>
+                <span th:text="*{provincecode}"></span>
+            </div>
+            <div class="form-group">
+                <span>涉敏人员：</span>
+                <span th:text="*{username}"></span>
+            </div>
+            <div class="form-group">
+                <span>所属系统：</span>
+                <span th:text="*{groupname}"></span>
+            </div>
+            <div class="form-group">
+                <span>子系统：</span>
+                <span th:text="*{subgroupname}"></span>
+            </div>
+            <div class="form-group">
+                <span>所属系统类型：</span>
+                <span id="groupnametype" th:text="*{groupnametype}"></span>
+            </div>
+            <div class="form-group">
+                <span>组织路径名称：</span>
+                <span th:text="*{orgpathname}"></span>
+            </div>
+            <div class="form-group">
+                <span>岗位角色：</span>
+                <span th:text="*{jobrole}"></span>
+            </div>
+            <div class="form-group">
+                <span>涉敏人员主账号：</span>
+                <span th:text="*{userid}"></span>
+            </div>
+            <div class="form-group">
+                <span>涉敏人员从账号：</span>
+                <span th:text="*{accountid}"></span>
+            </div>
+            <div class="form-group">
+                <span>从账号类型：</span>
+                <span id="authztype" th:text="*{authztype}"></span>
+            </div>
+            <div class="form-group">
+                <span>涉敏权限内容：</span>
+                <span id="sensitiveauthzcontent" th:text="*{sensitiveauthzcontent}"></span>
+            </div>
+            <div class="form-group">
+                <span>操作权限：</span>
+                <span id="operauthz" th:text="*{operauthz}"></span>
+            </div>
+            <div class="form-group">
+                <span>生效时间：</span>
+                <span th:text="*{#dates.format(accstarttime, 'yyyy-MM-dd HH:mm:ss')}"></span>
+            </div>
+            <div class="form-group">
+                <span>失效时间：</span>
+                <span th:text="*{#dates.format(accendtime, 'yyyy-MM-dd HH:mm:ss')}"></span>
+            </div>
+            <div class="form-group">
+                <span>备注：</span>
+                <span th:text="*{sensitiveBankRemark}"></span>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script th:inline="javascript">
+        var groupnametypeDatas = [[${@dict.getType('system_type')}]];
+        var authztypeDatas = [[${@dict.getType('from_account_type')}]];
+        var operauthzDatas = [[${@dict.getType('operation_permission')}]];
+        var sensitiveauthzcontentDatas = [[${@dict.getType('sensitive_content')}]];
+        function submitHandler() {
+        }
+        $(function() {
+            console.log(authztypeDatas.toString())
+            var groupnametype= $('#groupnametype').text();
+            var authztype= $('#authztype').text();
+            var groupnametype= $('#groupnametype').text(
+                getInfoByDict(groupnametypeDatas,groupnametype)
+            );
+            $('#authztype').text(
+                getInfoByDict(authztypeDatas,authztype)
+            );
+            getSensitiveauthzcontent();
+            getOperauthz();
+        });
+        function getSensitiveauthzcontent(){
+            var sensitiveauthzcontent= $('#sensitiveauthzcontent').text();
+            var arr=sensitiveauthzcontent.toString().split(",");
+            var str="";
+            for(var i=0;i<arr.length;i++){
+                str=str+getInfoByDict(sensitiveauthzcontentDatas, arr[i]);
+                if(i!=arr.length-1){
+                    str=str+",";
+                }
+            }
+            $('#sensitiveauthzcontent').text(str);
+        }
+
+        function getOperauthz(){
+            var operauthz= $('#operauthz').text();
+            var arr=operauthz.toString().split(",");
+            var str="";
+            for(var i=0;i<arr.length;i++){
+                str=str+getInfoByDict(operauthzDatas, arr[i]);
+                if(i!=arr.length-1){
+                    str=str+",";
+                }
+            }
+            $('#operauthz').text(str);
+        }
+        //参照$.table.selectDictLabel()方法重写了一个适配
+        function getInfoByDict(datas, value) {
+            var actions = [];
+            $.each(datas, function (index, dict) {
+                console.log(dict.toString())
+                if (dict.dictValue == ('' + value)) {
+                    var listClass = $.common.equals("default", dict.listClass) || $.common.isEmpty(dict.listClass) ? "" : "badge badge-" + dict.listClass;
+                    actions.push(dict.dictLabel);
+                    return false;
+                }
+            });
+            return actions;
+        }
+    </script>
+</body>
+</html>
