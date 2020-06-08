@@ -1,11 +1,9 @@
 package com.ultrapower.project.system.auditoutgoingdata.domain;
 
-import net.bytebuddy.build.HashCodeAndEqualsPlugin;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ultrapower.framework.aspectj.lang.annotation.Excel;
 import com.ultrapower.framework.web.domain.BaseEntity;
-import org.springframework.beans.factory.annotation.Value;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.util.Date;
 

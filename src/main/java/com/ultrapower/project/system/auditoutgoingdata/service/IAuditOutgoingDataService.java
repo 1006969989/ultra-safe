@@ -66,4 +66,13 @@ public interface IAuditOutgoingDataService
      * @return 结果
      */
     public int deleteAuditOutgoingDataById(String uuid);
+
+    /**
+     * 导入外送数据接口审计数据
+     *
+     * @param auditOutgoingDataList 外送数据接口审计导入的数据
+     * @param  updateSupport 是否更新已存在的数据
+     * @return 结果
+     */
+    public String importAuditOutgoingData(List<AuditOutgoingData> auditOutgoingDataList,boolean updateSupport);
 }

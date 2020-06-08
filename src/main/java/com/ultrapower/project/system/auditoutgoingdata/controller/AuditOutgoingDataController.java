@@ -1,5 +1,6 @@
 package com.ultrapower.project.system.auditoutgoingdata.controller;
 
+import com.ultrapower.common.exception.BusinessException;
 import com.ultrapower.common.utils.file.ImageUploadUtils;
 import com.ultrapower.common.utils.poi.ExcelUtil;
 import com.ultrapower.common.utils.text.Convert;
@@ -11,6 +12,7 @@ import com.ultrapower.framework.web.page.TableDataInfo;
 import com.ultrapower.project.system.auditoutgoingdata.domain.AuditOutgoingData;
 import com.ultrapower.project.system.auditoutgoingdata.service.IAuditOutgoingDataService;
 import com.ultrapower.project.system.user.domain.User;
+import org.apache.poi.ss.usermodel.PictureData;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 外送数据接口审计Controller
@@ -83,8 +86,11 @@ public class AuditOutgoingDataController extends BaseController
     public AjaxResult importData(MultipartFile file,boolean updateSupport) throws Exception{
         ExcelUtil<AuditOutgoingData> util = new ExcelUtil<>(AuditOutgoingData.class);
         List<AuditOutgoingData> auditOutgoingDataList = util.importExcel(file.getInputStream());
-        //String message = auditOutgoingDataService.importAuditOutgoingData(auditOutgoingDataList, updateSupport);
-        return AjaxResult.success("");
+        if(auditOutgoingDataList == null || auditOutgoingDataList.size() == 0){
+            return error("导入外送数据接口数据为空！");
+        }
+        String message = auditOutgoingDataService.importAuditOutgoingData(auditOutgoingDataList, updateSupport);
+        return AjaxResult.success(message);
     }
 
     /**

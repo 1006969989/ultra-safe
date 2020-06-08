@@ -140,14 +140,25 @@ public class ImageUploadUtils {
     /**
      * 解析旧的图片路径，获取文件名称
      * */
-    private static String parseOldImgPath(String oldImgPath){
-        String fileName = null;
+    private static String parseOldImgPath(String oldImgPath) throws Exception{
+        String fileName = "";
 
         if(oldImgPath != null && !"".equals(oldImgPath)){
             String[] oldImgPathArr = oldImgPath.split("/");
-            fileName = oldImgPathArr[oldImgPathArr.length-4] + File.separator + oldImgPathArr[oldImgPathArr.length-3] + File.separator + oldImgPathArr[oldImgPathArr.length-2] + File.separator + oldImgPathArr[oldImgPathArr.length-1];
-            if(fileName != null && !"".equals(fileName)){
+            //图片路径是2020/06/06/111.png，判断格式是不是有问题
+            if(oldImgPathArr.length == 1){
+                fileName = oldImgPath;
                 return fileName;
+            }
+            for(int i = oldImgPathArr.length-1; i >= 0; i--){
+                if(oldImgPathArr.length - 4 > 0 && i == oldImgPathArr.length-4){
+                    fileName = oldImgPathArr[i] + fileName;
+                    break;
+                }
+                fileName =oldImgPathArr[i] + File.separator + fileName;
+            }
+            if(fileName.endsWith(File.separator)){
+                fileName = fileName.substring(0,fileName.length()-1);
             }
         }
         return fileName;
