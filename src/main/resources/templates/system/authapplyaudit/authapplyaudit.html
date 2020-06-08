@@ -87,21 +87,14 @@
                 },
                 {
                     field : 'authApplyImg', 
-                    title : '申请审批记录证明截图'
+                    title : '申请审批记录证明截图',
+                    formatter: function (value, row, index) {
+                        return $.table.imageView(value,150,200,null);
+                    }
                 },
                 {
                     field : 'remark', 
                     title : '备注'
-                },
-                {
-                    title: '操作',
-                    align: 'center',
-                    formatter: function(value, row, index) {
-                        var actions = [];
-                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.editTab(\'' + row.uuid + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.uuid + '\')"><i class="fa fa-remove"></i>删除</a>');
-                        return actions.join('');
-                    }
                 }]
             };
             $.table.init(options);

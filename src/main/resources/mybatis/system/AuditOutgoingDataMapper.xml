@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ultrapower.project.system.auditoutgoingdata.mapper.AuditOutgoingDataMapper">
+
+    <resultMap type="com.ultrapower.project.system.auditoutgoingdata.domain.AuditOutgoingData" id="AuditOutgoingDataResult">
+        <result property="uuid"    column="uuid"    />
+        <result property="auditor"    column="auditor"    />
+        <result property="auditorId"    column="auditor_id"    />
+        <result property="systemName"    column="system_name"    />
+        <result property="time"    column="time"    />
+        <result property="auditContent"    column="audit_content"    />
+        <result property="contentCategory"    column="content_category"    />
+        <result property="auditPoint"    column="audit_point"    />
+        <result property="systemOverview"    column="system_overview"    />
+        <result property="netStruts"    column="net_struts"    />
+        <result property="systemTransportSafe"    column="system_transport_safe"    />
+        <result property="dataStorageSafe"    column="data_storage_safe"    />
+        <result property="dataAccessSafe"    column="data_access_safe"    />
+        <result property="auditSummary"    column="audit_summary"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createUserid"    column="create_userid"    />
+        <result property="modifyTime"    column="modify_time"    />
+        <result property="modifyUserid"    column="modify_userid"    />
+        <result property="logicdelete"    column="logicdelete"    />
+        <result property="groupuuid"    column="groupuuid"    />
+    </resultMap>
+
+    <sql id="selectAuditOutgoingDataVo">
+        select uuid, auditor, auditor_id, system_name, time, audit_content, content_category, audit_point, system_overview, net_struts, system_transport_safe, data_storage_safe, data_access_safe, audit_summary, create_time, create_userid, modify_time, modify_userid, logicdelete, groupuuid from e_audit_outgoing_data
+    </sql>
+
+    <select id="selectAuditOutgoingDataList" parameterType="com.ultrapower.project.system.auditoutgoingdata.domain.AuditOutgoingData" resultMap="AuditOutgoingDataResult">
+        <include refid="selectAuditOutgoingDataVo"/>
+        <where>
+            <if test="uuid != null  and uuid != ''"> and uuid = #{uuid}</if>
+            <if test="auditor != null  and auditor != ''"> and auditor = #{auditor}</if>
+            <if test="auditorId != null  and auditorId != ''"> and auditor_id = #{auditorId}</if>
+            <if test="systemName != null  and systemName != ''"> and system_name like concat(concat('%', #{systemName}), '%')</if>
+            <if test="auditContent != null  and auditContent != ''"> and audit_content = #{auditContent}</if>
+            <if test="contentCategory != null  and contentCategory != ''"> and content_category = #{contentCategory}</if>
+            <if test="auditPoint != null  and auditPoint != ''"> and audit_point = #{auditPoint}</if>
+            <if test="systemOverview != null  and systemOverview != ''"> and system_overview = #{systemOverview}</if>
+            <if test="netStruts != null  and netStruts != ''"> and net_struts = #{netStruts}</if>
+            <if test="systemTransportSafe != null  and systemTransportSafe != ''"> and system_transport_safe = #{systemTransportSafe}</if>
+            <if test="dataStorageSafe != null  and dataStorageSafe != ''"> and data_storage_safe = #{dataStorageSafe}</if>
+            <if test="dataAccessSafe != null  and dataAccessSafe != ''"> and data_access_safe = #{dataAccessSafe}</if>
+            <if test="auditSummary != null  and auditSummary != ''"> and audit_summary = #{auditSummary}</if>
+            <if test="createTime != null "> and create_time = #{createTime}</if>
+            <if test="createUserid != null  and createUserid != ''"> and create_userid = #{createUserid}</if>
+            <if test="modifyTime != null "> and modify_time = #{modifyTime}</if>
+            <if test="modifyUserid != null  and modifyUserid != ''"> and modify_userid = #{modifyUserid}</if>
+            <if test="logicdelete != null  and logicdelete != ''"> and logicdelete = #{logicdelete}</if>
+            <if test="groupuuid != null  and groupuuid != ''"> and groupuuid = #{groupuuid}</if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                and time >= to_date(#{params.beginTime},'yyyy-MM-dd')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                and time &lt;= to_date(#{params.endTime},'yyyy-MM-dd')
+            </if>
+        </where>
+    </select>
+
+    <select id="selectAuditOutgoingDataById" parameterType="java.lang.String" resultMap="AuditOutgoingDataResult">
+        <include refid="selectAuditOutgoingDataVo"/>
+        where uuid = #{uuid}
+    </select>
+
+    <select id="selectAuditOutgoingDataByIds" parameterType="java.lang.String" resultMap="AuditOutgoingDataResult">
+        <include refid="selectAuditOutgoingDataVo"/>
+        where uuid in
+        <foreach item="uuid" collection="array" open="(" separator="," close=")">
+            #{uuid}
+        </foreach>
+    </select>
+
+    <insert id="insertAuditOutgoingData" parameterType="com.ultrapower.project.system.auditoutgoingdata.domain.AuditOutgoingData">
+        <selectKey keyProperty="uuid" resultType="string" order="BEFORE">
+            SELECT seq_e_audit_outgoing_data.NEXTVAL as uuid FROM DUAL
+        </selectKey>
+        insert into e_audit_outgoing_data
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="uuid != null  and uuid != ''">uuid,</if>
+            <if test="auditor != null  and auditor != ''">auditor,</if>
+            <if test="auditorId != null  and auditorId != ''">auditor_id,</if>
+            <if test="systemName != null  and systemName != ''">system_name,</if>
+            <if test="time != null ">time,</if>
+            <if test="auditContent != null  and auditContent != ''">audit_content,</if>
+            <if test="contentCategory != null  and contentCategory != ''">content_category,</if>
+            <if test="auditPoint != null  and auditPoint != ''">audit_point,</if>
+            <if test="systemOverview != null  and systemOverview != ''">system_overview,</if>
+            <if test="netStruts != null  and netStruts != ''">net_struts,</if>
+            <if test="systemTransportSafe != null  and systemTransportSafe != ''">system_transport_safe,</if>
+            <if test="dataStorageSafe != null  and dataStorageSafe != ''">data_storage_safe,</if>
+            <if test="dataAccessSafe != null  and dataAccessSafe != ''">data_access_safe,</if>
+            <if test="auditSummary != null  and auditSummary != ''">audit_summary,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="createUserid != null  and createUserid != ''">create_userid,</if>
+            <if test="modifyTime != null ">modify_time,</if>
+            <if test="modifyUserid != null  and modifyUserid != ''">modify_userid,</if>
+            <if test="logicdelete != null  and logicdelete != ''">logicdelete,</if>
+            <if test="groupuuid != null  and groupuuid != ''">groupuuid,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="uuid != null  and uuid != ''">#{uuid},</if>
+            <if test="auditor != null  and auditor != ''">#{auditor},</if>
+            <if test="auditorId != null  and auditorId != ''">#{auditorId},</if>
+            <if test="systemName != null  and systemName != ''">#{systemName},</if>
+            <if test="time != null ">#{time},</if>
+            <if test="auditContent != null  and auditContent != ''">#{auditContent},</if>
+            <if test="contentCategory != null  and contentCategory != ''">#{contentCategory},</if>
+            <if test="auditPoint != null  and auditPoint != ''">#{auditPoint},</if>
+            <if test="systemOverview != null  and systemOverview != ''">#{systemOverview},</if>
+            <if test="netStruts != null  and netStruts != ''">#{netStruts},</if>
+            <if test="systemTransportSafe != null  and systemTransportSafe != ''">#{systemTransportSafe},</if>
+            <if test="dataStorageSafe != null  and dataStorageSafe != ''">#{dataStorageSafe},</if>
+            <if test="dataAccessSafe != null  and dataAccessSafe != ''">#{dataAccessSafe},</if>
+            <if test="auditSummary != null  and auditSummary != ''">#{auditSummary},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="createUserid != null  and createUserid != ''">#{createUserid},</if>
+            <if test="modifyTime != null ">#{modifyTime},</if>
+            <if test="modifyUserid != null  and modifyUserid != ''">#{modifyUserid},</if>
+            <if test="logicdelete != null  and logicdelete != ''">#{logicdelete},</if>
+            <if test="groupuuid != null  and groupuuid != ''">#{groupuuid},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAuditOutgoingData" parameterType="com.ultrapower.project.system.auditoutgoingdata.domain.AuditOutgoingData">
+        update e_audit_outgoing_data
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="auditor != null  and auditor != ''">auditor = #{auditor},</if>
+            <if test="auditorId != null  and auditorId != ''">auditor_id = #{auditorId},</if>
+            <if test="systemName != null  and systemName != ''">system_name = #{systemName},</if>
+            <if test="time != null ">time = #{time},</if>
+            <if test="auditContent != null  and auditContent != ''">audit_content = #{auditContent},</if>
+            <if test="contentCategory != null  and contentCategory != ''">content_category = #{contentCategory},</if>
+            <if test="auditPoint != null  and auditPoint != ''">audit_point = #{auditPoint},</if>
+            <if test="systemOverview != null  and systemOverview != ''">system_overview = #{systemOverview},</if>
+            <if test="netStruts != null  and netStruts != ''">net_struts = #{netStruts},</if>
+            <if test="systemTransportSafe != null  and systemTransportSafe != ''">system_transport_safe = #{systemTransportSafe},</if>
+            <if test="dataStorageSafe != null  and dataStorageSafe != ''">data_storage_safe = #{dataStorageSafe},</if>
+            <if test="dataAccessSafe != null  and dataAccessSafe != ''">data_access_safe = #{dataAccessSafe},</if>
+            <if test="auditSummary != null  and auditSummary != ''">audit_summary = #{auditSummary},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="createUserid != null  and createUserid != ''">create_userid = #{createUserid},</if>
+            <if test="modifyTime != null ">modify_time = #{modifyTime},</if>
+            <if test="modifyUserid != null  and modifyUserid != ''">modify_userid = #{modifyUserid},</if>
+            <if test="logicdelete != null  and logicdelete != ''">logicdelete = #{logicdelete},</if>
+            <if test="groupuuid != null  and groupuuid != ''">groupuuid = #{groupuuid},</if>
+        </trim>
+        where uuid = #{uuid}
+    </update>
+
+    <delete id="deleteAuditOutgoingDataById" parameterType="java.lang.String">
+        delete from e_audit_outgoing_data where uuid = #{uuid}
+    </delete>
+
+    <delete id="deleteAuditOutgoingDataByIds" parameterType="java.lang.String">
+        delete from e_audit_outgoing_data where uuid in
+        <foreach item="uuid" collection="array" open="(" separator="," close=")">
+            #{uuid}
+        </foreach>
+    </delete>
+
+</mapper>
