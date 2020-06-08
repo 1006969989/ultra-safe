@@ -18,6 +18,7 @@ import com.ultrapower.common.utils.file.FileUploadUtils;
 import com.ultrapower.common.utils.file.FileUtils;
 import com.ultrapower.common.utils.file.MimeTypeUtils;
 import com.ultrapower.common.utils.poi.ExcelUtil;
+import com.ultrapower.common.utils.text.Convert;
 import com.ultrapower.framework.aspectj.lang.annotation.Log;
 import com.ultrapower.framework.aspectj.lang.enums.BusinessType;
 import com.ultrapower.framework.config.RuoYiConfig;
@@ -26,6 +27,7 @@ import com.ultrapower.framework.web.domain.AjaxResult;
 import com.ultrapower.framework.web.page.TableDataInfo;
 import com.ultrapower.project.system.physecannex.domain.Annex;
 import com.ultrapower.project.system.physecsys.domain.PhySecSys;
+import com.ultrapower.project.system.sensitivebank.domain.SensitiveBank;
 import com.ultrapower.project.system.sign.domain.FileInfo;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,7 +91,7 @@ public class LettersSignController extends BaseController
             System.out.println(lettersSign.toString());
             lettersSign.setUuid(UUID.randomUUID().toString().replace("-", ""));
             lettersSign.setLogicdelete("0");
-            lettersSign.setCreatetime(getNowDateToString());
+            lettersSign.setCreateTime(new Date());
             lettersSignService.insertLettersSign(lettersSign);
         }
         return AjaxResult.success("导入成功");
@@ -110,9 +112,13 @@ public class LettersSignController extends BaseController
     @RequiresPermissions("system:sign:export")
     @PostMapping("/export")
     @ResponseBody
-    public AjaxResult export(LettersSign lettersSign)
+    public AjaxResult export(String ids)
     {
-        List<LettersSign> list = lettersSignService.selectLettersSignList(lettersSign);
+        String[] id= Convert.toStrArray(ids);
+        List<LettersSign> list = new ArrayList<LettersSign>();
+        for(int i=0;i<id.length;i++){
+            list.add(lettersSignService.selectLettersSignById(id[i]));
+        }
         ExcelUtil<LettersSign> util = new ExcelUtil<LettersSign>(LettersSign.class);
         return util.exportExcel(list, "责任安全书及保密协议签署情况");
     }
@@ -138,7 +144,7 @@ public class LettersSignController extends BaseController
         uuid = uuid.replace("-", "");
         lettersSign.setUuid(uuid);
         lettersSign.setLogicdelete("0");
-        System.out.println("lettersSign= "+lettersSign);
+
         //以下是文件上传部分
         String savePath = RuoYiConfig.getUploadPath();//来自配置
         System.out.println("secretLetterFiles大小= "+secretLetterFiles.length);
@@ -152,7 +158,8 @@ public class LettersSignController extends BaseController
         }
         lettersSign.setSecretLetter(savePath+"/secretLetters/"+uuid);
         lettersSign.setRespLetter(savePath+"/respLetters/"+uuid);
-        lettersSign.setCreatetime(getNowDateToString());
+        lettersSign.setCreateTime(new Date());
+        System.out.println("lettersSign= "+lettersSign);
         return toAjax(lettersSignService.insertLettersSign(lettersSign));
     }
 
@@ -175,7 +182,7 @@ public class LettersSignController extends BaseController
     @ResponseBody
     public AjaxResult editSave(LettersSign lettersSign)
     {
-        lettersSign.setModifyTime(getNowDateToString());
+        lettersSign.setModifyTime(new Date());
         return toAjax(lettersSignService.updateLettersSign(lettersSign));
     }
 
@@ -188,7 +195,18 @@ public class LettersSignController extends BaseController
     @ResponseBody
     public AjaxResult remove(String ids)
     {
-        return toAjax(lettersSignService.deleteLettersSignByIds(ids));
+        //逻辑删除
+        String[] id= Convert.toStrArray(ids);
+        LettersSign lettersSign=new LettersSign();
+        lettersSign.setLogicdelete("1");
+        int flag=1;
+        for(int i=0;i<id.length;i++){
+            lettersSign.setUuid(id[i]);
+            if(lettersSignService.updateLettersSign(lettersSign)!=1){
+                flag=0;
+            }
+        }
+        return toAjax(flag);
     }
 
     /**
@@ -380,11 +398,11 @@ public class LettersSignController extends BaseController
     }
 
     //工具方法，获取时间并转为String
-    public String getNowDateToString(){
+    /*public String getNowDateToString(){
         Date date = new Date();
         String strDateFormat = "yyyy-MM-dd HH:mm:ss";
         SimpleDateFormat sdf = new SimpleDateFormat(strDateFormat);
         return sdf.format(date);
-    }
+    }*/
 
 }

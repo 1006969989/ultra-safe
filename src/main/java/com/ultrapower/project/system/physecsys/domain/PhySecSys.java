@@ -1,9 +1,12 @@
 package com.ultrapower.project.system.physecsys.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ultrapower.framework.aspectj.lang.annotation.Excel;
 import com.ultrapower.framework.web.domain.BaseEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+
+import java.util.Date;
 
 /**
  * 物理安全情况对象 physical_security_system
@@ -42,10 +45,13 @@ public class PhySecSys extends BaseEntity
     private String groupuuid;
 
     /** 创建时间 */
-    @Excel(name = "创建时间")
-    private String createtime;
+    @Excel(name = "创建时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date createtime;
+
     /** 修改时间 */
-    private String modifytime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date modifytime;
 
     /** 创建用户编号 */
     private String createuserid;
@@ -116,21 +122,21 @@ public class PhySecSys extends BaseEntity
     {
         return groupuuid;
     }
-    public void setCreatetime(String createtime)
-    {
+
+    public void setCreatetime(Date createtime) {
         this.createtime = createtime;
     }
 
-    public String getCreatetime()
-    {
+    public Date getCreatetime() {
         return createtime;
     }
-    public void setModifytime(String modifytime)
+
+    public void setModifytime(Date modifytime)
     {
         this.modifytime = modifytime;
     }
 
-    public String getModifytime()
+    public Date getModifytime()
     {
         return modifytime;
     }
@@ -156,17 +162,17 @@ public class PhySecSys extends BaseEntity
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("uuid", getUuid())
-            .append("systemname", getSystemname())
-            .append("cabinetnum", getCabinetnum())
-            .append("specificmeasure", getSpecificmeasure())
-            .append("reason", getReason())
-            .append("logicdelete", getLogicdelete())
-            .append("groupuuid", getGroupuuid())
-            .append("createtime", getCreatetime())
-            .append("modifytime", getModifytime())
-            .append("createuserid", getCreateuserid())
-            .append("modifyuserid", getModifyuserid())
-            .toString();
+                .append("uuid", getUuid())
+                .append("systemname", getSystemname())
+                .append("cabinetnum", getCabinetnum())
+                .append("specificmeasure", getSpecificmeasure())
+                .append("reason", getReason())
+                .append("logicdelete", getLogicdelete())
+                .append("groupuuid", getGroupuuid())
+                .append("createtime", getCreatetime())
+                .append("modifytime", getModifytime())
+                .append("createuserid", getCreateuserid())
+                .append("modifyuserid", getModifyuserid())
+                .toString();
     }
 }

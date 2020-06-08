@@ -79,7 +79,7 @@
                     <a class="btn btn-info" onclick="$.table.importExcel()">
                         <i class="fa fa-upload"></i> 导入
                     </a>
-                    <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:physecsys:export">
+                    <a class="btn btn-warning" onclick="exportByIds()" shiro:hasPermission="system:physecsys:export">
                         <i class="fa fa-download"></i> 导出
                     </a>
                 </div>
@@ -192,6 +192,30 @@
                 url : url
             };
             $.modal.openOptions(options);
+        }
+        function exportByIds(){
+            table.set();
+            var rows = $.common.isEmpty(table.options.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns(table.options.uniqueId);
+            if (rows.length == 0) {
+                $.modal.alertWarning("请至少选择一条记录");
+                return;
+            }
+            $.modal.confirm("确认要导出选中的" + rows.length + "条数据吗?", function() {
+                var url = table.options.exportUrl;
+                var data = { "ids": rows.join() };
+                console.log(data);
+                $.modal.loading("正在导出数据，请稍后...");
+                $.post(table.options.exportUrl, data, function(result) {
+                    if (result.code == web_status.SUCCESS) {
+                        window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
+                    } else if (result.code == web_status.WARNING) {
+                        $.modal.alertWarning(result.msg)
+                    } else {
+                        $.modal.alertError(result.msg);
+                    }
+                    $.modal.closeLoading();
+                });
+            });
         }
 
         /*左侧业务系统结构树*/

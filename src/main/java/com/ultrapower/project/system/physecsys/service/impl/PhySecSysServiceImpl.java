@@ -37,13 +37,13 @@ public class PhySecSysServiceImpl implements IPhySecSysService
     /**
      * 查询物理安全情况列表
      *
-     * @param systemname,createtime 系统名称 创建时间
+     * @param phySecSys
      * @return 物理安全情况
      */
     @Override
-    public List<PhySecSys> selectPhySecSysList(String systemname, String groupuuid, String createtime)
+    public List<PhySecSys> selectPhySecSysList(PhySecSys phySecSys)
     {
-        return phySecSysMapper.selectPhySecSysList(systemname,groupuuid,createtime);
+        return phySecSysMapper.selectPhySecSysList(phySecSys);
     }
 
     /**

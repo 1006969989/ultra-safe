@@ -23,10 +23,10 @@ public interface IPhySecSysService
     /**
      * 查询物理安全情况列表
      *
-     * @param systemname,groupuuid,createtime 系统名称 所属系统id 创建时间
+     * @param  phySecSys
      * @return 物理安全情况集合
      */
-    public List<PhySecSys> selectPhySecSysList(String systemname, String groupuuid, String createtime);
+    public List<PhySecSys> selectPhySecSysList(PhySecSys phySecSys);
 
     /**
      * 新增物理安全情况

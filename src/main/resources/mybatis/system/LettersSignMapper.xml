@@ -11,7 +11,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="department"    column="department"    />
         <result property="secretLetter"    column="secret_letter"    />
         <result property="respLetter"    column="resp_letter"    />
-        <result property="createtime"    column="create_time"    />
+        <result property="createTime"    column="create_time"    />
         <result property="createUserid"    column="create_userid"    />
         <result property="modifyTime"    column="modify_time"    />
         <result property="modifyUserid"    column="modify_userid"    />
@@ -26,6 +26,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectLettersSignList" parameterType="com.ultrapower.project.system.sign.domain.LettersSign" resultMap="LettersSignResult">
         <include refid="selectLettersSignVo"/>
         <where>
+            logicdelete='0'
             <if test="personName != null  and personName != ''"> and person_name like concat(concat('%', #{personName}), '%')</if>
             <if test="company != null  and company != ''"> and company like concat(concat('%', #{company}), '%')</if>
             <if test="department != null  and department != ''"> and department like concat(concat('%', #{department}), '%')</if>
@@ -49,13 +50,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="department != null  and department != ''">department,</if>
             <if test="secretLetter != null  and secretLetter != ''">secret_letter,</if>
             <if test="respLetter != null  and respLetter != ''">resp_letter,</if>
-            <if test="createtime != null  and createtime != ''">create_time,</if>
+            <if test="createTime != null">create_time,</if>
             <if test="createUserid != null  and createUserid != ''">create_userid,</if>
-            <if test="modifyTime != null  and modifyTime != ''">modify_time,</if>
+            <if test="modifyTime != null">modify_time,</if>
             <if test="modifyUserid != null  and modifyUserid != ''">modify_userid,</if>
             <if test="logicdelete != null  and logicdelete != ''">logicdelete,</if>
             <if test="groupuuid != null  and groupuuid != ''">groupuuid,</if>
-         </trim>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="uuid != null  and uuid != ''">#{uuid},</if>
             <if test="personName != null  and personName != ''">#{personName},</if>
@@ -63,13 +64,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="department != null  and department != ''">#{department},</if>
             <if test="secretLetter != null  and secretLetter != ''">#{secretLetter},</if>
             <if test="respLetter != null  and respLetter != ''">#{respLetter},</if>
-            <if test="createtime != null  and createtime != ''">#{createtime},</if>
+            <if test="createTime != null">#{createTime},</if>
             <if test="createUserid != null  and createUserid != ''">#{createUserid},</if>
-            <if test="modifyTime != null  and modifyTime != ''">#{modifyTime},</if>
+            <if test="modifyTime != null">#{modifyTime},</if>
             <if test="modifyUserid != null  and modifyUserid != ''">#{modifyUserid},</if>
             <if test="logicdelete != null  and logicdelete != ''">#{logicdelete},</if>
             <if test="groupuuid != null  and groupuuid != ''">#{groupuuid},</if>
-         </trim>
+        </trim>
     </insert>
 
     <update id="updateLettersSign" parameterType="com.ultrapower.project.system.sign.domain.LettersSign">
@@ -80,9 +81,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="department != null  and department != ''">department = #{department},</if>
             <if test="secretLetter != null  and secretLetter != ''">secret_letter = #{secretLetter},</if>
             <if test="respLetter != null  and respLetter != ''">resp_letter = #{respLetter},</if>
-            <if test="createtime != null  and createTime != ''">create_time = #{createtime},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
             <if test="createUserid != null  and createUserid != ''">create_userid = #{createUserid},</if>
-            <if test="modifyTime != null  and modifyTime != ''">modify_time = #{modifyTime},</if>
+            <if test="modifyTime != null">modify_time = #{modifyTime},</if>
             <if test="modifyUserid != null  and modifyUserid != ''">modify_userid = #{modifyUserid},</if>
             <if test="logicdelete != null  and logicdelete != ''">logicdelete = #{logicdelete},</if>
             <if test="groupuuid != null  and groupuuid != ''">groupuuid = #{groupuuid},</if>

@@ -22,12 +22,22 @@
         select uuid, systemname, cabinetnum, specificmeasure, reason, logicdelete, groupuuid, createtime, modifytime, createuserid, modifyuserid from physical_security_system
     </sql>
 
-    <select id="selectPhySecSysList" parameterType="java.lang.String" resultMap="PhySecSysResult">
+    <!--<select id="selectPhySecSysList" parameterType="java.lang.String" resultMap="PhySecSysResult">
         <include refid="selectPhySecSysVo"/>
         <where>
             <if test="systemname != null  and systemname != ''"> and systemname like concat(concat('%', #{systemname}), '%')</if>
             <if test="groupuuid != null  and groupuuid != ''"> and groupuuid = #{groupuuid}</if>
             <if test="createtime != null "> and createtime like concat(concat('%', #{createtime}), '%')</if>
+        </where>
+    </select>-->
+    <select id="selectPhySecSysList" parameterType="com.ultrapower.project.system.physecsys.domain.PhySecSys" resultMap="PhySecSysResult">
+        <include refid="selectPhySecSysVo"/>
+        <where>
+            logicdelete='0'
+            <if test="systemname != null  and systemname != ''"> and systemname like concat(concat('%', #{systemname}), '%')</if>
+            <if test="groupuuid != null  and groupuuid != ''"> and groupuuid = #{groupuuid}</if>
+            <!--<if test="createtime != null "> and createtime like concat(concat('%', #{createtime}), '%')</if>-->
+            <if test="createtime != null "> and to_char(createtime, 'yyyy-mm-dd' ) = to_char(#{createtime}, 'yyyy-mm-dd' )</if>
         </where>
     </select>
 
