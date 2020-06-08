@@ -81,7 +81,6 @@
         function submitHandler() {
         }
         $(function() {
-            console.log(authztypeDatas.toString())
             var groupnametype= $('#groupnametype').text();
             var authztype= $('#authztype').text();
             var groupnametype= $('#groupnametype').text(
@@ -124,7 +123,6 @@
             $.each(datas, function (index, dict) {
                 console.log(dict.toString())
                 if (dict.dictValue == ('' + value)) {
-                    var listClass = $.common.equals("default", dict.listClass) || $.common.isEmpty(dict.listClass) ? "" : "badge badge-" + dict.listClass;
                     actions.push(dict.dictLabel);
                     return false;
                 }

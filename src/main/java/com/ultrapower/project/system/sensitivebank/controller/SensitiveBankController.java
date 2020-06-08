@@ -11,7 +11,10 @@ import com.ultrapower.framework.aspectj.lang.enums.BusinessType;
 import com.ultrapower.framework.web.controller.BaseController;
 import com.ultrapower.framework.web.domain.AjaxResult;
 import com.ultrapower.framework.web.page.TableDataInfo;
+import com.ultrapower.project.system.dict.domain.DictData;
+import com.ultrapower.project.system.dict.domain.DictType;
 import com.ultrapower.project.system.dict.service.DictDataServiceImpl;
+import com.ultrapower.project.system.dict.service.IDictDataService;
 import com.ultrapower.project.system.physecsys.domain.PhySecSys;
 import com.ultrapower.project.system.sign.domain.LettersSign;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -43,6 +46,8 @@ public class SensitiveBankController extends BaseController
 
     @Autowired
     private ISensitiveBankService sensitiveBankService;
+    @Autowired
+    private IDictDataService dictDataService;
 
     @RequiresPermissions("system:sensitivebank:view")
     @GetMapping()
@@ -75,6 +80,8 @@ public class SensitiveBankController extends BaseController
         List<SensitiveBank> sensitiveBankList = util.importExcel(file.getInputStream());
         for(SensitiveBank sensitiveBank : sensitiveBankList){
             System.out.println(sensitiveBank.toString());
+            //此处进行字典对照转换
+            sensitiveBank=voToDto(sensitiveBank);
             sensitiveBank.setLogicdelete("0");
             sensitiveBankService.insertSensitiveBank(sensitiveBank);
         }
@@ -98,18 +105,11 @@ public class SensitiveBankController extends BaseController
     @ResponseBody
     public AjaxResult export(String ids)
     {
-        /*通过下面这个方法便可以获取到字典的标签
-        DictUtils.getDictLabel(dictType, dictValue, defaultValue)；
-        其中
-        dictType：为字典的名字
-        dictValue：字典的值（你想要转化的当前字典的值）
-        defaultValue：若dictValue在dictType中没有匹配到任何一个值的话 则显示defaultValue*/
-        //DictDataServiceImpl
         System.out.println(ids);
         String[] id= Convert.toStrArray(ids);
         List<SensitiveBank> list = new ArrayList<SensitiveBank>();
         for(int i=0;i<id.length;i++){
-            list.add(sensitiveBankService.selectSensitiveBankById(id[i]));
+            list.add(dtoToVo(sensitiveBankService.selectSensitiveBankById(id[i])));
         }
         ExcelUtil<SensitiveBank> util = new ExcelUtil<SensitiveBank>(SensitiveBank.class);
         return util.exportExcel(list, "涉敏人员库");
@@ -192,5 +192,116 @@ public class SensitiveBankController extends BaseController
         SensitiveBank sensitiveBank = sensitiveBankService.selectSensitiveBankById(uuid);
         mmap.put("sensitiveBank", sensitiveBank);
         return prefix + "/detail";
+    }
+    //导出时所用字典对照
+    public SensitiveBank dtoToVo(SensitiveBank sensitiveBank){
+        List<DictData> dicList;
+        //所属系统类型字典对照
+        dicList=dictDataService.selectDictDataByType("system_type");
+        String groupnametype=sensitiveBank.getGroupnametype();
+        for (DictData dict:dicList){
+            if(dict.getDictValue().equals(groupnametype)){
+                sensitiveBank.setGroupnametype(dict.getDictLabel());
+                break;
+            }
+        }
+        //从账号类型字典对照
+        dicList=dictDataService.selectDictDataByType("from_account_type");
+        String authztype=sensitiveBank.getAuthztype();
+        for (DictData dict:dicList){
+            if(dict.getDictValue().equals(authztype)){
+                sensitiveBank.setAuthztype(dict.getDictLabel());
+                break;
+            }
+        }
+        //操作权限对照
+        dicList=dictDataService.selectDictDataByType("operation_permission");
+        String[] operauthzs=sensitiveBank.getOperauthz().split(",");
+        String realOperauthz="";
+        for(int i=0;i<operauthzs.length;i++){
+            for (DictData dict:dicList){
+                if(dict.getDictValue().equals(operauthzs[i])){
+                    realOperauthz+=dict.getDictLabel();
+                    if(i!=operauthzs.length-1){
+                        realOperauthz+=",";
+                    }
+                    break;
+                }
+            }
+        }
+        sensitiveBank.setOperauthz(realOperauthz);
+        //涉敏权限内容对照
+        dicList=dictDataService.selectDictDataByType("sensitive_content");
+        String[] sensitiveauthzcontents=sensitiveBank.getSensitiveauthzcontent().split(",");
+        String realContent="";
+        for(int i=0;i<sensitiveauthzcontents.length;i++){
+            for (DictData dict:dicList){
+                if(dict.getDictValue().equals(sensitiveauthzcontents[i])){
+                    realContent+=dict.getDictLabel();
+                    if(i!=sensitiveauthzcontents.length-1){
+                        realContent+=",";
+                    }
+                    break;
+                }
+            }
+        }
+        sensitiveBank.setSensitiveauthzcontent(realContent);
+        return sensitiveBank;
+    }
+
+    //导入时的字典对照(本质是在导出的字典对照方法中 将getDictValue与getDictLabel互换)
+    public SensitiveBank voToDto(SensitiveBank sensitiveBank){
+        List<DictData> dicList;
+        //所属系统类型字典对照
+        dicList=dictDataService.selectDictDataByType("system_type");
+        String groupnametype=sensitiveBank.getGroupnametype();
+        for (DictData dict:dicList){
+            if(dict.getDictLabel().equals(groupnametype)){
+                sensitiveBank.setGroupnametype(dict.getDictValue());
+                break;
+            }
+        }
+        //从账号类型字典对照
+        dicList=dictDataService.selectDictDataByType("from_account_type");
+        String authztype=sensitiveBank.getAuthztype();
+        for (DictData dict:dicList){
+            if(dict.getDictLabel().equals(authztype)){
+                sensitiveBank.setAuthztype(dict.getDictValue());
+                break;
+            }
+        }
+        //操作权限对照
+        dicList=dictDataService.selectDictDataByType("operation_permission");
+        String[] operauthzs=sensitiveBank.getOperauthz().split(",");
+        String realOperauthz="";
+        for(int i=0;i<operauthzs.length;i++){
+            for (DictData dict:dicList){
+                if(dict.getDictLabel().equals(operauthzs[i])){
+                    realOperauthz+=dict.getDictValue();
+                    if(i!=operauthzs.length-1){
+                        realOperauthz+=",";
+                    }
+                    break;
+                }
+            }
+        }
+        sensitiveBank.setOperauthz(realOperauthz);
+        //涉敏权限内容对照
+        dicList=dictDataService.selectDictDataByType("sensitive_content");
+        String[] sensitiveauthzcontents=sensitiveBank.getSensitiveauthzcontent().split(",");
+        String realContent="";
+        for(int i=0;i<sensitiveauthzcontents.length;i++){
+            for (DictData dict:dicList){
+                if(dict.getDictLabel().equals(sensitiveauthzcontents[i])){
+                    realContent+=dict.getDictValue();
+                    if(i!=sensitiveauthzcontents.length-1){
+                        realContent+=",";
+                    }
+                    break;
+                }
+            }
+        }
+        sensitiveBank.setSensitiveauthzcontent(realContent);
+        return sensitiveBank;
     }
 }
