@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('新增涉敏资产库')" />
+	<th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+	<form class="form-horizontal m" id="form-subacc-add">
+		<div class="form-group">
+			<label class="col-sm-3 control-label">资产IP：</label>
+			<div class="col-sm-8">
+				<input name="resip" class="form-control" type="text">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label">资产名称：</label>
+			<div class="col-sm-8">
+				<input name="resname" class="form-control" type="text">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label">所属系统：</label>
+			<div class="col-sm-8">
+				<select name="belongsystem" th:with="type=${@dict.getType('system_type')}">
+					<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+				</select>
+			</div>
+		</div>
+		<div class="form-group">
+					<label class="col-xs-2 control-label">所属子系统：</label>
+					<div class="col-sm-8">
+						<input name="subsystem" onclick="selectResGroupTree()"
+							   id="groupsnames" type="text" placeholder="请选择业务系统"
+							   class="form-control" required>
+					</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label">是否加金库策略：</label>
+			<div class="col-sm-8">
+				<select name="isjksys" th:with="type=${@dict.getType('treasury_strategy')}">
+					<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+				</select>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label">涉敏对象类型：</label>
+			<div class="col-sm-8">
+				<select name="senobjtype" class="form-control m-b">
+					<option value="">所有</option>
+				</select>
+				<span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label">涉敏对象：</label>
+			<div class="col-sm-8">
+				<input name="senobject" class="form-control" type="text">
+			</div>
+		</div>
+	</form>
+</div>
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: datetimepicker-js" />
+<script type="text/javascript">
+	var prefix = ctx + "system/subacc"
+	$("#form-subacc-add").validate({
+		focusCleanup: true
+	});
+
+	function submitHandler() {
+		if ($.validate.form()) {
+			$.operate.save(prefix + "/add", $('#form-subacc-add').serialize());
+		}
+	}
+
+	$("input[name='modifytime']").datetimepicker({
+		format: "yyyy-mm-dd",
+		minView: "month",
+		autoclose: true
+	});
+</script>
+<script>
+	/*新增-选择业务系统树*/
+	function selectResGroupTree() {
+		var resgroupids = $.common.isEmpty($("#resgroupids").val()) ? "0"
+				: $("#resgroupids").val();
+
+		var url = ctx + "system/resgroup/selectMResGroupTree/"
+				+ resgroupids;
+		var options = {
+			title : '选择业务系统',
+			width : "480",
+			url : url,
+			callBack : doSubmit
+		};
+		$.modal.openOptions(options);
+	}
+
+	function doSubmit(index, layero) {
+		var tree = layero.find("iframe")[0].contentWindow.$._tree;
+
+		var nodes = tree.getCheckedNodes(true);
+		if (nodes.length < 1) {
+			$.modal.msg('请至少选择一个业务系统！', modal_status.WARNING);
+		} else {
+			var ids = [];
+			var names = [];
+			for (var i = 0; i < nodes.length; i++) {
+				if (nodes[i].isParent == false) {
+					names.push(nodes[i].name);
+				}
+				ids.push(nodes[i].id);
+			}
+
+			$("#resgroupids").val(ids);
+			$("#groupsnames").val(names);
+
+			layer.close(index);
+		}
+	}
+</script>
+</body>
+</html>

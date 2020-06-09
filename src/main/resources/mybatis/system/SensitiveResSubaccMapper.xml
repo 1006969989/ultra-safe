@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ultrapower.project.system.subacc.mapper.SensitiveResSubaccMapper">
+
+	<resultMap type="com.ultrapower.project.system.subacc.domain.SensitiveResSubacc" id="SensitiveResSubaccResult">
+		<result property="uuid"    column="uuid"    />
+		<result property="resname"    column="resname"    />
+		<result property="resip"    column="resip"    />
+		<result property="belongsystem"    column="belongsystem"    />
+		<result property="subsystem"    column="subsystem"    />
+		<result property="isjksys"    column="isjksys"    />
+		<result property="senobjtype"    column="senobjtype"    />
+		<result property="senobject"    column="senobject"    />
+		<result property="createtime"    column="createtime"    />
+		<result property="createuserid"    column="createuserid"    />
+		<result property="modifytime"    column="modifytime"    />
+		<result property="modifyuserid"    column="modifyuserid"    />
+		<result property="status"    column="status"    />
+		<result property="delreason"    column="delreason"    />
+		<result property="groupuuid"    column="groupuuid"    />
+	</resultMap>
+
+	<sql id="selectSensitiveResSubaccVo">
+        select uuid, resname, resip, belongsystem, subsystem, isjksys, senobjtype, senobject, createtime, createuserid, modifytime, modifyuserid, status, delreason, groupuuid from sensitive_res_subacc
+    </sql>
+
+	<select id="selectSensitiveResSubaccList" parameterType="com.ultrapower.project.system.subacc.domain.SensitiveResSubacc" resultMap="SensitiveResSubaccResult">
+		<include refid="selectSensitiveResSubaccVo"/>
+		<where>
+			<if test="resname != null  and resname != ''"> and resname like concat(concat('%', #{resname}), '%')</if>
+			<if test="resip != null  and resip != ''"> and resip = #{resip}</if>
+			<if test="belongsystem != null  and belongsystem != ''"> and belongsystem = #{belongsystem}</if>
+			<if test="subsystem != null  and subsystem != ''"> and subsystem = #{subsystem}</if>
+			<if test="isjksys != null  and isjksys != ''"> and isjksys = #{isjksys}</if>
+			<if test="senobjtype != null  and senobjtype != ''"> and senobjtype = #{senobjtype}</if>
+			<if test="senobject != null  and senobject != ''"> and senobject = #{senobject}</if>
+			<if test="params.beginCreatetime != null and params.beginCreatetime != '' and params.endCreatetime != null and params.endCreatetime != ''"> and createtime between #{params.beginCreatetime} and #{params.endCreatetime}</if>
+			<if test="createuserid != null  and createuserid != ''"> and createuserid = #{createuserid}</if>
+			<if test="modifyuserid != null  and modifyuserid != ''"> and modifyuserid = #{modifyuserid}</if>
+			<if test="status != null  and status != ''"> and status = #{status}</if>
+			<if test="delreason != null  and delreason != ''"> and delreason = #{delreason}</if>
+			<if test="groupuuid != null  and groupuuid != ''"> and groupuuid = #{groupuuid}</if>
+		</where>
+	</select>
+
+	<select id="selectSensitiveResSubaccById" parameterType="java.lang.String" resultMap="SensitiveResSubaccResult">
+		<include refid="selectSensitiveResSubaccVo"/>
+		where uuid = #{uuid}
+	</select>
+
+	<insert id="insertSensitiveResSubacc" parameterType="com.ultrapower.project.system.subacc.domain.SensitiveResSubacc">
+		<selectKey keyProperty="uuid" resultType="string" order="BEFORE">
+			SELECT seq_sensitive_res_subacc.NEXTVAL as uuid FROM DUAL
+		</selectKey>
+		insert into sensitive_res_subacc
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="uuid != null  and uuid != ''">uuid,</if>
+			<if test="resname != null  and resname != ''">resname,</if>
+			<if test="resip != null  and resip != ''">resip,</if>
+			<if test="belongsystem != null  and belongsystem != ''">belongsystem,</if>
+			<if test="subsystem != null  and subsystem != ''">subsystem,</if>
+			<if test="isjksys != null  and isjksys != ''">isjksys,</if>
+			<if test="senobjtype != null  and senobjtype != ''">senobjtype,</if>
+			<if test="senobject != null  and senobject != ''">senobject,</if>
+			<if test="createuserid != null  and createuserid != ''">createuserid,</if>
+			<if test="modifyuserid != null  and modifyuserid != ''">modifyuserid,</if>
+			<if test="status != null  and status != ''">status,</if>
+			<if test="delreason != null  and delreason != ''">delreason,</if>
+			<if test="groupuuid != null  and groupuuid != ''">groupuuid,</if>
+			createtime
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="uuid != null  and uuid != ''">#{uuid},</if>
+			<if test="resname != null  and resname != ''">#{resname},</if>
+			<if test="resip != null  and resip != ''">#{resip},</if>
+			<if test="belongsystem != null  and belongsystem != ''">#{belongsystem},</if>
+			<if test="subsystem != null  and subsystem != ''">#{subsystem},</if>
+			<if test="isjksys != null  and isjksys != ''">#{isjksys},</if>
+			<if test="senobjtype != null  and senobjtype != ''">#{senobjtype},</if>
+			<if test="senobject != null  and senobject != ''">#{senobject},</if>
+			<if test="createuserid != null  and createuserid != ''">#{createuserid},</if>
+			<if test="modifyuserid != null  and modifyuserid != ''">#{modifyuserid},</if>
+			<if test="status != null  and status != ''">#{status},</if>
+			<if test="delreason != null  and delreason != ''">#{delreason},</if>
+			<if test="groupuuid != null  and groupuuid != ''">#{groupuuid},</if>
+			sysdate
+		</trim>
+	</insert>
+
+	<update id="updateSensitiveResSubacc" parameterType="com.ultrapower.project.system.subacc.domain.SensitiveResSubacc">
+		update sensitive_res_subacc
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="resname != null  and resname != ''">resname = #{resname},</if>
+			<if test="resip != null  and resip != ''">resip = #{resip},</if>
+			<if test="belongsystem != null  and belongsystem != ''">belongsystem = #{belongsystem},</if>
+			<if test="subsystem != null  and subsystem != ''">subsystem = #{subsystem},</if>
+			<if test="isjksys != null  and isjksys != ''">isjksys = #{isjksys},</if>
+			<if test="senobjtype != null  and senobjtype != ''">senobjtype = #{senobjtype},</if>
+			<if test="senobject != null  and senobject != ''">senobject = #{senobject},</if>
+			<if test="createuserid != null  and createuserid != ''">createuserid = #{createuserid},</if>
+			<if test="modifyuserid != null  and modifyuserid != ''">modifyuserid = #{modifyuserid},</if>
+			<if test="status != null  and status != ''">status = #{status},</if>
+			<if test="delreason != null  and delreason != ''">delreason = #{delreason},</if>
+			<if test="groupuuid != null  and groupuuid != ''">groupuuid = #{groupuuid},</if>
+			modifytime = sysdate
+		</trim>
+		where uuid = #{uuid}
+	</update>
+
+	<delete id="deleteSensitiveResSubaccById" parameterType="java.lang.String">
+        delete from sensitive_res_subacc where uuid = #{uuid}
+    </delete>
+
+	<delete id="deleteSensitiveResSubaccByIds" parameterType="java.lang.String">
+		delete from sensitive_res_subacc where uuid in
+		<foreach item="uuid" collection="array" open="(" separator="," close=")">
+			#{uuid}
+		</foreach>
+	</delete>
+
+</mapper>

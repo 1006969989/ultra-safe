@@ -64,8 +64,14 @@
 			<if test="sharecode != null  and sharecode != ''"> and sharecode = #{sharecode}</if>
 			<if test="desip != null  and desip != ''"> and desip = #{desip}</if>
 			<if test="shareway != null  and shareway != ''"> and shareway = #{shareway}</if>
-			<if test="createtime != null  and createtime != ''"> and createtime = #{createtime}</if>
-			<if test="modifytime != null  and modifytime != ''"> and modifytime = #{modifytime}</if>
+			<if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+				AND createtime &gt;= to_date(#{params.beginTime},'yyyy-MM-dd
+				HH24:mi:ss')
+			</if>
+			<if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+				AND createtime &lt;= to_date(#{params.endTime},'yyyy-MM-dd
+				HH24:mi:ss')
+			</if>
 			<if test="groupuuid != null  and groupuuid != ''"> and groupuuid = #{groupuuid}</if>
 			<if test="logicdelete != null  and logicdelete != ''"> and logicdelete = #{logicdelete}</if>
 			<if test="sourcedepartment != null  and sourcedepartment != ''"> and sourcedepartment = #{sourcedepartment}</if>
@@ -122,7 +128,7 @@
 			<if test="sharecode != null  and sharecode != ''">sharecode,</if>
 			<if test="desip != null  and desip != ''">desip,</if>
 			<if test="shareway != null  and shareway != ''">shareway,</if>
-			<if test="createtime != null  and createtime != ''">createtime,</if>
+
 			<if test="modifytime != null  and modifytime != ''">modifytime,</if>
 			<if test="groupuuid != null  and groupuuid != ''">groupuuid,</if>
 			<if test="logicdelete != null  and logicdelete != ''">logicdelete,</if>
@@ -159,6 +165,7 @@
 			<if test="modifyuserid != null  and modifyuserid != ''">modifyuserid,</if>
 			<if test="province != null  and province != ''">province,</if>
 			<if test="description != null  and description != ''">description,</if>
+			createtime
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
 			<if test="uuid != null  and uuid != ''">#{uuid},</if>
@@ -205,6 +212,7 @@
 			<if test="modifyuserid != null  and modifyuserid != ''">#{modifyuserid},</if>
 			<if test="province != null  and province != ''">#{province},</if>
 			<if test="description != null  and description != ''">#{description},</if>
+			sysdate
 		</trim>
 	</insert>
 
@@ -217,8 +225,6 @@
 			<if test="sharecode != null  and sharecode != ''">sharecode = #{sharecode},</if>
 			<if test="desip != null  and desip != ''">desip = #{desip},</if>
 			<if test="shareway != null  and shareway != ''">shareway = #{shareway},</if>
-			<if test="createtime != null  and createtime != ''">createtime = #{createtime},</if>
-			<if test="modifytime != null  and modifytime != ''">modifytime = #{modifytime},</if>
 			<if test="groupuuid != null  and groupuuid != ''">groupuuid = #{groupuuid},</if>
 			<if test="logicdelete != null  and logicdelete != ''">logicdelete = #{logicdelete},</if>
 			<if test="sourcedepartment != null  and sourcedepartment != ''">sourcedepartment = #{sourcedepartment},</if>
@@ -254,6 +260,7 @@
 			<if test="modifyuserid != null  and modifyuserid != ''">modifyuserid = #{modifyuserid},</if>
 			<if test="province != null  and province != ''">province = #{province},</if>
 			<if test="description != null  and description != ''">description = #{description},</if>
+			modifytime = sysdate
 		</trim>
 		where uuid = #{uuid}
 	</update>
