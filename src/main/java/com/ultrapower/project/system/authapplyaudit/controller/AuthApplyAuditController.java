@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -95,12 +94,12 @@ public class AuthApplyAuditController extends BaseController
     @ResponseBody
     public AjaxResult addSave(@RequestParam(value = "file", required = false) MultipartFile file, AuthApplyAudit authApplyAudit,HttpServletRequest request) {
 
-        //图片访问的URI
-        String returnUrl = ImageUploadUtils.getImageReturnUrl(request,module);
-        //当前项目路径
-        String destDir = ImageUploadUtils.getImageProjectPath(module);
-
         try {
+            //图片访问的URI
+            String returnUrl = ImageUploadUtils.getImageReturnUrl(request,module);
+            //当前项目路径
+            String destDir = ImageUploadUtils.getImageProjectPath(module);
+
             String imagePath = ImageUploadUtils.uploadImage(file, destDir,returnUrl);
             if(imagePath != null && !"".equals(imagePath)){
                 authApplyAudit.setAuthApplyImg(imagePath);
@@ -135,15 +134,15 @@ public class AuthApplyAuditController extends BaseController
 
         //先判断图片有没有更新，更新了才上传
         if(file != null && file.getOriginalFilename() != null && !"".equals(file.getOriginalFilename())){
-            //图片访问的URI
-            String returnUrl = ImageUploadUtils.getImageReturnUrl(request,module);
-
-            //当前项目路径
-            String destDir = ImageUploadUtils.getImageProjectPath(module);
-            //打成jar包之后，class下的路径
-            String imageClassPath = ImageUploadUtils.getImageClassPath(module);
-
             try {
+                //图片访问的URI
+                String returnUrl = ImageUploadUtils.getImageReturnUrl(request,module);
+
+                //当前项目路径
+                String destDir = ImageUploadUtils.getImageProjectPath(module);
+                //打成jar包之后，class下的路径
+                String imageClassPath = ImageUploadUtils.getImageClassPath(module);
+
                 //上传新的图片
                 String imagePath = ImageUploadUtils.uploadImage(file, destDir,returnUrl);
                 String oldImgPath = null;
@@ -156,7 +155,7 @@ public class AuthApplyAuditController extends BaseController
 
                 //删除原来图片
                 if(oldImgPath != null && !"".equals(oldImgPath)){
-                    ImageUploadUtils.deleteImageFile(destDir,imageClassPath,oldImgPath);
+                    ImageUploadUtils.deleteImageFile(imageClassPath,oldImgPath);
                 }
                 //成功上传之后，把新图片访问路径保存到数据表中
                 if(imagePath != null && !"".equals(imagePath)){
@@ -181,8 +180,6 @@ public class AuthApplyAuditController extends BaseController
     public AjaxResult remove(String ids) throws IOException{
 
         try {
-            //当前项目路径
-            String destDir = ImageUploadUtils.getImageProjectPath(module);
             //打成jar包之后，class下的路径
             String imageClassPath = ImageUploadUtils.getImageClassPath(module);
 
@@ -192,7 +189,7 @@ public class AuthApplyAuditController extends BaseController
                     AuthApplyAudit authApplyAudit = authApplyAuditList.get(i);
                     String oldImgPath = authApplyAudit.getAuthApplyImg();
                     if (oldImgPath != null && !"".equals(oldImgPath)) {
-                        ImageUploadUtils.deleteImageFile(destDir, imageClassPath, oldImgPath);
+                        ImageUploadUtils.deleteImageFile(imageClassPath, oldImgPath);
                     }
                 }
             }

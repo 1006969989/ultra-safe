@@ -4,13 +4,12 @@ import com.ultrapower.common.exception.file.FileNameLengthLimitExceededException
 import com.ultrapower.common.exception.file.FileSizeLimitExceededException;
 import org.apache.commons.fileupload.FileUploadException;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ImageUploadUtils {
 
@@ -60,12 +59,7 @@ public class ImageUploadUtils {
             File desc = getAbsoluteFile(resourcesPath, fileName);
             file.transferTo(desc);
 
-            //项目打成jar包可能不存在src/main/resources/static...目录,路径可能直接是static/... 所以需要判断一下
-            ClassPathResource classPathResource = new ClassPathResource("static/img" + File.separator + fileName);
-            //如果不存在此图片,则上传
-            if(!classPathResource.exists()){
-                String path = classPathResource.getPath();
-            }
+            //封装页面图片的访问路径,http://127.0.0.1:80/img/auditoutgoingdata/2020/06/05/xxxx.png
             imgPath = imgPath + fileName;
         }
         return imgPath;
@@ -73,31 +67,60 @@ public class ImageUploadUtils {
 
     /**
      * 单个文件的删除
-     * @param sourcePath resources目录下的图片路径
      * @param imageClassPath 项目打成jar包之后，图片在resources目录下的路径
      * @param oldImgPath 旧的文件路径
      * */
-    public static void deleteImageFile(String sourcePath,String imageClassPath,String oldImgPath) throws Exception{
+    public static void deleteImageFile(String imageClassPath,String oldImgPath) throws Exception{
 
         String fileName = parseOldImgPath(oldImgPath);
 
         if(fileName != null) {
-            //先删除main/resources下面的图片
-            if (sourcePath != null && !"".equals(sourcePath)) {
-                File sourceImgFile = new File(sourcePath + File.separator + fileName);
-                if (sourceImgFile.exists() && !sourceImgFile.isDirectory()) {
-                    sourceImgFile.delete();
-                }
-            }
-
             //项目打成jar包之后，直接删除static目录下
             if (imageClassPath != null && !"".equals(imageClassPath)) {
                 ClassPathResource classPathResource = new ClassPathResource(imageClassPath + File.separator + fileName);
                 if (classPathResource.exists()) {
-                    //删除上传的图片
+                    //删除上传的图片（年/月/日  2020/06/09）
                     File file = classPathResource.getFile();
                     if (file.exists() && !file.isDirectory()) {
+                        /**
+                         * 图片路径（年/月/日  2020/06/09）
+                         * dayDir 上一级文件夹  09
+                         * monthDir 上一级的上一级文件夹 06
+                         * yearDir 上一级的上一级的上一级文件夹 2020
+                         * */
+                        //
+                        File dayDir = file.getParentFile();
+                        File monthDir = dayDir.getParentFile();
+                        File yearDir = monthDir.getParentFile();
+
+                        //先删除文件
                         file.delete();
+
+                        //判断当前文件的上一级文件夹是不是为空
+                        if(dayDir.isDirectory()){
+                            File[] files = dayDir.listFiles();
+                            if(files.length <= 0){
+                                //删除文件夹
+                                dayDir.delete();
+                            }
+                        }
+                        //判断当前文件的上一级的上一级文件夹是不是为空
+                        if(monthDir.isDirectory()){
+                            File[] files = monthDir.listFiles();
+                            if(files.length <= 0){
+                                //删除文件夹
+                                monthDir.delete();
+                            }
+                        }
+
+                        //判断当前文件的上一级的上一级的上一级文件夹是不是为空
+                        if(yearDir.isDirectory()){
+                            File[] files = yearDir.listFiles();
+                            if(files.length <= 0){
+                                //删除文件夹
+                                yearDir.delete();
+                            }
+                        }
                     }
                 }
             }
@@ -151,11 +174,11 @@ public class ImageUploadUtils {
                 return fileName;
             }
             for(int i = oldImgPathArr.length-1; i >= 0; i--){
+                fileName =oldImgPathArr[i] + File.separator + fileName;
+
                 if(oldImgPathArr.length - 4 > 0 && i == oldImgPathArr.length-4){
-                    fileName = oldImgPathArr[i] + fileName;
                     break;
                 }
-                fileName =oldImgPathArr[i] + File.separator + fileName;
             }
             if(fileName.endsWith(File.separator)){
                 fileName = fileName.substring(0,fileName.length()-1);
@@ -174,12 +197,10 @@ public class ImageUploadUtils {
     }
 
     /**
-     * 获取图片上传路径,当前的项目src/main/resources/static/...路径下
+     * 获取图片上传路径,项目打成jar包后，图片静态资源存储在classes/static/img/...路径下
      * */
-    public static String getImageProjectPath(String module){
-        //当前项目路径
-        String projectPath = System.getProperty("user.dir");
-        String destDir = projectPath + File.separator + "src"+File.separator+"main"+ File.separator +"resources"+File.separator+"static"+ File.separator+"img"+File.separator+ module + File.separator;
+    public static String getImageProjectPath(String module) throws Exception{
+        String destDir = ResourceUtils.getURL("classpath:").getPath() + File.separator + "static"+ File.separator+"img"+File.separator+ module + File.separator;;
         return destDir;
     }
 

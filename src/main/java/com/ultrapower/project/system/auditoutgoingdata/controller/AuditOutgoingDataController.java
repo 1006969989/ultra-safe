@@ -1,18 +1,21 @@
 package com.ultrapower.project.system.auditoutgoingdata.controller;
 
-import com.ultrapower.common.exception.BusinessException;
+import com.deepoove.poi.data.PictureRenderData;
+import com.deepoove.poi.util.BytePictureUtils;
+import com.ultrapower.common.utils.DateUtils;
+import com.ultrapower.common.utils.file.FileUtils;
 import com.ultrapower.common.utils.file.ImageUploadUtils;
+import com.ultrapower.common.utils.file.WordUtils;
 import com.ultrapower.common.utils.poi.ExcelUtil;
 import com.ultrapower.common.utils.text.Convert;
 import com.ultrapower.framework.aspectj.lang.annotation.Log;
 import com.ultrapower.framework.aspectj.lang.enums.BusinessType;
+import com.ultrapower.framework.config.RuoYiConfig;
 import com.ultrapower.framework.web.controller.BaseController;
 import com.ultrapower.framework.web.domain.AjaxResult;
 import com.ultrapower.framework.web.page.TableDataInfo;
 import com.ultrapower.project.system.auditoutgoingdata.domain.AuditOutgoingData;
 import com.ultrapower.project.system.auditoutgoingdata.service.IAuditOutgoingDataService;
-import com.ultrapower.project.system.user.domain.User;
-import org.apache.poi.ss.usermodel.PictureData;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,6 +24,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -32,8 +37,8 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/system/auditoutgoingdata")
-public class AuditOutgoingDataController extends BaseController
-{
+public class AuditOutgoingDataController extends BaseController {
+
     private String prefix = "system/auditoutgoingdata";
 
     @Autowired
@@ -41,6 +46,9 @@ public class AuditOutgoingDataController extends BaseController
 
     //每一个模块上传图片都会把图片放到img/模块名/...  文件夹中
     private String module = "auditoutgoingdata";
+
+    //word报告的模板相对路径
+    private String targetWordTemplatePath = "templates/system/auditoutgoingdata/word/外送数据接口审计报告（XX系统）.docx";
 
     @RequiresPermissions("system:auditoutgoingdata:view")
     @GetMapping()
@@ -123,12 +131,12 @@ public class AuditOutgoingDataController extends BaseController
     @ResponseBody
     public AjaxResult addSave(@RequestParam(value = "file", required = false) MultipartFile file,
                               AuditOutgoingData auditOutgoingData, HttpServletRequest request) {
-
-        //图片访问的URI
-        String returnUrl = ImageUploadUtils.getImageReturnUrl(request,module);
-        //当前项目路径
-        String destDir = ImageUploadUtils.getImageProjectPath(module);
         try {
+            //图片访问的URI
+            String returnUrl = ImageUploadUtils.getImageReturnUrl(request,module);
+            //当前项目路径
+            String destDir = ImageUploadUtils.getImageProjectPath(module);
+
             String imagePath = ImageUploadUtils.uploadImage(file, destDir,returnUrl);
             if(imagePath != null && !"".equals(imagePath)){
                 auditOutgoingData.setNetStruts(imagePath);
@@ -162,14 +170,16 @@ public class AuditOutgoingDataController extends BaseController
                                AuditOutgoingData auditOutgoingData, HttpServletRequest request) {
         //先判断图片有没有更新，更新了才上传
         if(file != null && file.getOriginalFilename() != null && !"".equals(file.getOriginalFilename())){
-            //图片访问的URI
-            String returnUrl = ImageUploadUtils.getImageReturnUrl(request,module);
-            //当前项目路径
-            String destDir = ImageUploadUtils.getImageProjectPath(module);
 
-            //打成jar包之后，class下的路径
-            String imageClassPath = ImageUploadUtils.getImageClassPath(module);
             try {
+                //图片访问的URI
+                String returnUrl = ImageUploadUtils.getImageReturnUrl(request,module);
+                //当前项目路径
+                String destDir = ImageUploadUtils.getImageProjectPath(module);
+
+                //打成jar包之后，class下的图片路径
+                String imageClassPath = ImageUploadUtils.getImageClassPath(module);
+
                 //上传新的图片
                 String imagePath = ImageUploadUtils.uploadImage(file, destDir,returnUrl);
                 String oldImgPath = null;
@@ -182,7 +192,7 @@ public class AuditOutgoingDataController extends BaseController
 
                 //删除原来图片
                 if(oldImgPath != null && !"".equals(oldImgPath)){
-                    ImageUploadUtils.deleteImageFile(destDir,imageClassPath,oldImgPath);
+                    ImageUploadUtils.deleteImageFile(imageClassPath,oldImgPath);
                 }
                 //成功上传之后，把新图片访问路径保存到数据表中
                 if(imagePath != null && !"".equals(imagePath)){
@@ -206,11 +216,10 @@ public class AuditOutgoingDataController extends BaseController
     @ResponseBody
     public AjaxResult remove(String ids) {
 
-        //当前项目路径
-        String destDir = ImageUploadUtils.getImageProjectPath(module);
-        //打成jar包之后，class下的路径
-        String imageClassPath = ImageUploadUtils.getImageClassPath(module);
         try {
+            //打成jar包之后，class下的路径
+            String imageClassPath = ImageUploadUtils.getImageClassPath(module);
+
             //删除图片
             List<AuditOutgoingData> dataList = auditOutgoingDataService.selectAuditOutgoingDataByIds(Convert.toStrArray(ids));
             if (dataList != null && dataList.size() > 0) {
@@ -218,7 +227,7 @@ public class AuditOutgoingDataController extends BaseController
                     AuditOutgoingData auditData = dataList.get(i);
                     String oldImgPath = auditData.getNetStruts();
                     if (oldImgPath != null && !"".equals(oldImgPath)) {
-                        ImageUploadUtils.deleteImageFile(destDir,imageClassPath,oldImgPath);
+                        ImageUploadUtils.deleteImageFile(imageClassPath,oldImgPath);
                     }
                 }
             }
@@ -239,4 +248,69 @@ public class AuditOutgoingDataController extends BaseController
         mmap.put("auditOutgoingData", auditOutgoingData);
         return prefix + "/detail";
     }
+
+
+    /**
+     * 生成word报告
+     */
+    @RequiresPermissions("system:auditoutgoingdata:word")
+    @Log(title = "外送数据接口审计", businessType = BusinessType.OTHER)
+    @GetMapping( "/genWord")
+    @ResponseBody
+    public void genWord(HttpServletRequest request,HttpServletResponse response, String id) throws Exception {
+
+        AuditOutgoingData auditOutgoingData = auditOutgoingDataService.selectAuditOutgoingDataById(id);
+        Map<String,Object> paramMap = renderMap(auditOutgoingData);
+        if(auditOutgoingData == null){
+            throw new Exception("当前选择的数据不存在!");
+        }
+
+        String[] path = targetWordTemplatePath.split("/word/");
+        String templateFileName = path[1];
+
+        String wordName = WordUtils.encodingFilename(templateFileName);
+
+        //生成word文件存储地址
+        String dir = RuoYiConfig.getDownloadPath() + "word/";
+        String filePath = WordUtils.createWord(targetWordTemplatePath,dir,wordName,paramMap);
+        //将生成的word报告响应用户
+        response.setCharacterEncoding("utf-8");
+        response.setContentType("multipart/form-data");
+        response.setHeader("Content-Disposition",
+                "attachment;fileName=" + FileUtils.setFileDownloadHeader(request, wordName));
+        FileUtils.writeBytes(filePath,response.getOutputStream());
+    }
+
+    /**
+     * 渲染数据到map中
+     * */
+    private Map<String,Object> renderMap(AuditOutgoingData auditOutgoingData){
+        if(auditOutgoingData == null){
+            return null;
+        }
+        Map<String,Object> map = new HashMap<>();
+        if(auditOutgoingData.getTime() != null && !"".equals(auditOutgoingData.getTime())){
+            map.put("time",DateUtils.parseDateToStr(DateUtils.YYYY_MM_DD_HH_MM_SS,auditOutgoingData.getTime()));
+        }
+
+        map.put("auditor",auditOutgoingData.getAuditor());
+        map.put("systemName",auditOutgoingData.getSystemName());
+        map.put("auditContent",auditOutgoingData.getAuditContent());
+        map.put("contentCategory",auditOutgoingData.getContentCategory());
+        map.put("auditPoint",auditOutgoingData.getAuditPoint());
+        map.put("systemOverview",auditOutgoingData.getSystemOverview());
+
+        String netStruts = auditOutgoingData.getNetStruts();
+        if(netStruts != null && !"".equals(netStruts)){
+            String format = netStruts.substring(netStruts.lastIndexOf("."));
+            map.put("netStruts",new PictureRenderData(300, 150, format, BytePictureUtils.getUrlBufferedImage(netStruts)));
+        }
+
+        map.put("systemTransportSafe",auditOutgoingData.getSystemTransportSafe());
+        map.put("dataStorageSafe",auditOutgoingData.getDataStorageSafe());
+        map.put("dataAccessSafe",auditOutgoingData.getDataAccessSafe());
+        map.put("auditSummary",auditOutgoingData.getAuditSummary());
+        return map;
+    }
+
 }

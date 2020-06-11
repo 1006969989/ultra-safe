@@ -52,6 +52,9 @@
             <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:auditoutgoingdata:export">
                 <i class="fa fa-download"></i> 导出
             </a>
+            <a class="btn btn-success multiple disabled" onclick="javascript:genWord()" shiro:hasPermission="system:auditoutgoingdata:word">
+                <i class="fa fa-download"></i> 生成word报告
+            </a>
         </div>
         <div class="col-sm-12 select-table table-striped">
             <table id="bootstrap-table"></table>
@@ -159,6 +162,24 @@
         };
         $.table.init(options);
     });
+
+    //生成word报告
+    function genWord() {
+        var rows = $.table.selectColumns("uuid");
+        if (rows.length == 0) {
+            $.modal.alertWarning("请选择要生成word报告的数据");
+            return;
+        }
+        if(rows.length > 1){
+            $.modal.alertWarning("请选择要生成word报告的一条数据");
+            return;
+        }
+        $.modal.confirm("确认要生成选中的" + rows.length + "条数据吗?", function() {
+            location.href = prefix + "/genWord?id=" + rows;
+            layer.msg('执行成功,正在生成word报告请稍后…', { icon: 1 });
+        });
+    }
+
 </script>
 </body>
 <!-- 导入区域 -->

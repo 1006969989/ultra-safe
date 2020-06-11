@@ -35,6 +35,7 @@
 		<poi.version>3.17</poi.version>
 		<oshi.version>3.9.1</oshi.version>
 		<oracle.version>10.2.0.4.0</oracle.version>
+		<tl.version>1.5.0</tl.version>
 	</properties>
 
 	<dependencies>
@@ -277,6 +278,12 @@
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-ooxml</artifactId>
 			<version>${poi.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.deepoove</groupId>
+			<artifactId>poi-tl</artifactId>
+			<version>${tl.version}</version>
 		</dependency>
 
 	</dependencies>
