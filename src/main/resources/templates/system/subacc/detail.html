@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('系统共享数据详情')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-sharedatainfo-edit" th:object="${sensitiveResSubacc}">
+        <input name="uuid" th:field="*{uuid}" type="hidden">
+        <div class="form-group">
+            <span>涉敏资产库详细信息</span>
+        </div>
+        <div class="form-group">
+                <span >资产IP：</span>
+                <span th:text="*{resip}"></span>
+        </div>
+        <div class="form-group">
+            <span >资产名称：</span>
+            <span th:text="*{resname}"></span>
+        </div>
+
+        <div class="form-group">
+            <span >所属系统：</span>
+            <span th:text="*{belongsystem}"></span>
+        </div>
+        <div class="form-group">
+            <span >所属子系统：</span>
+            <span th:text="*{subsystem}"></span>
+        </div>
+
+        <div class="form-group">
+            <span >是否加金库策略：</span>
+            <span th:text="*{isjksys}"></span>
+        </div>
+        <div class="form-group">
+            <span >涉敏对象类型：</span>
+            <span th:text="*{senobjtype}"></span>
+        </div>
+        <div class="form-group">
+            <span >涉敏对象：</span>
+            <span th:text="*{senobject}"></span>
+        </div>
+        <div class="form-group">
+            <span >资产IP：</span>
+            <span th:text="*{resip}"></span>
+        </div>
+
+    </form>
+</div>
+</body>
+</html>

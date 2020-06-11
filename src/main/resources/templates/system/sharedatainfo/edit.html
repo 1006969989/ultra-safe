@@ -44,21 +44,9 @@
 			</div>
 		</div>
 		<div class="form-group">
-			<label class="col-sm-3 control-label">修改时间：</label>
-			<div class="col-sm-8">
-				<input name="modifytime" th:field="*{modifytime}" class="form-control" type="text">
-			</div>
-		</div>
-		<div class="form-group">
 			<label class="col-sm-3 control-label">所属资源组：</label>
 			<div class="col-sm-8">
 				<input name="groupuuid" th:field="*{groupuuid}" class="form-control" type="text" required>
-			</div>
-		</div>
-		<div class="form-group">
-			<label class="col-sm-3 control-label">是否删除  0 正常  1 已删除：</label>
-			<div class="col-sm-8">
-				<input name="logicdelete" th:field="*{logicdelete}" class="form-control" type="text">
 			</div>
 		</div>
 		<div class="form-group">
@@ -160,7 +148,11 @@
 		<div class="form-group">
 			<label class="col-sm-3 control-label">数据级别：</label>
 			<div class="col-sm-8">
-				<input name="datalevel" th:field="*{datalevel}" class="form-control" type="text">
+				<select name="datalevel" class="form-control m-b" th:with="type=${@dict.getType('data_level')}">
+					<option value="">默认空值</option>
+					<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}">
+					</option>
+				</select>
 			</div>
 		</div>
 		<div class="form-group">
@@ -172,7 +164,11 @@
 		<div class="form-group">
 			<label class="col-sm-3 control-label">向集团报备：</label>
 			<div class="col-sm-8">
-				<input name="upload" th:field="*{upload}" class="form-control" type="text">
+				<select name="upload" class="form-control m-b" th:with="type=${@dict.getType('report_submit')}">
+					<option value="">默认空值</option>
+					<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}">
+					</option>
+				</select>
 			</div>
 		</div>
 		<div class="form-group">
@@ -223,7 +219,11 @@
 		<div class="form-group">
 			<label class="col-sm-3 control-label">共享数据时限范围：</label>
 			<div class="col-sm-8">
-				<input name="hourlimit" th:field="*{hourlimit}" class="form-control" type="text">
+				<select name="hourlimit" class="form-control m-b" th:with="type=${@dict.getType('hour_limit')}">
+					<option value="">默认空值</option>
+					<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}">
+					</option>
+				</select>
 			</div>
 		</div>
 		<div class="form-group">

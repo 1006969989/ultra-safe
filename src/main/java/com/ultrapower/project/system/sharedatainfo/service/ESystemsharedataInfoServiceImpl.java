@@ -3,11 +3,9 @@ package com.ultrapower.project.system.sharedatainfo.service;
 
 import com.ultrapower.common.exception.BusinessException;
 import com.ultrapower.common.utils.StringUtils;
-import com.ultrapower.common.utils.security.ShiroUtils;
 import com.ultrapower.common.utils.text.Convert;
 import com.ultrapower.project.system.sharedatainfo.domain.ESystemsharedataInfo;
 import com.ultrapower.project.system.sharedatainfo.mapper.ESystemsharedataInfoMapper;
-import com.ultrapower.project.system.user.service.UserServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,9 +99,9 @@ public class ESystemsharedataInfoServiceImpl implements IESystemsharedataInfoSer
         return eSystemsharedataInfoMapper.deleteESystemsharedataInfoById(uuid);
     }
     /**
-     * 导入用户数据
+     * 导入系统共享数据
      *
-     * @param eSystemsharedataInfoListList        用户数据列表
+     * @param eSystemsharedataInfoListList        系统共享数据列表
      * @param isUpdateSupport 是否更新支持，如果已存在，则进行更新数据
      * @return 结果
      */

@@ -5,6 +5,8 @@ import com.ultrapower.framework.web.domain.BaseEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.util.Date;
+
 /**
  * 系统共享数据信息对象 e_systemsharedata_info
  *
@@ -45,11 +47,11 @@ public class ESystemsharedataInfo extends BaseEntity
 
     /** 创建时间 */
     @Excel(name = "创建时间")
-    private String createtime;
+    private Date createtime;
 
     /** 修改时间 */
     @Excel(name = "修改时间")
-    private String modifytime;
+    private Date modifytime;
 
     /** 所属资源组 */
     @Excel(name = "所属资源组")
@@ -223,13 +225,6 @@ public class ESystemsharedataInfo extends BaseEntity
         this.frameworklocation = frameworklocation;
     }
 
-    public String getCreatetime() {
-        return createtime;
-    }
-
-    public void setCreatetime(String createtime) {
-        this.createtime = createtime;
-    }
 
     public String getFrameworklocation()
     {
@@ -262,15 +257,23 @@ public class ESystemsharedataInfo extends BaseEntity
     {
         return shareway;
     }
-    public void setModifytime(String modifytime)
-    {
+
+    public Date getCreatetime() {
+        return createtime;
+    }
+
+    public void setCreatetime(Date createtime) {
+        this.createtime = createtime;
+    }
+
+    public Date getModifytime() {
+        return modifytime;
+    }
+
+    public void setModifytime(Date modifytime) {
         this.modifytime = modifytime;
     }
 
-    public String getModifytime()
-    {
-        return modifytime;
-    }
     public void setGroupuuid(String groupuuid)
     {
         this.groupuuid = groupuuid;
